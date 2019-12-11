@@ -6,11 +6,15 @@ import { Observable, of } from "rxjs";
 import { Product } from "../models/Product";
 import { Basket, BasketDto } from "../models/Basket";
 import { map } from "rxjs/operators";
+import { isDefined } from '@angular/compiler/src/util';
 
 @Injectable({
   providedIn: "root"
 })
 export class DataService {
+
+   basket: Basket = null;
+
   constructor(private http: HttpClient) {}
 
   getCategories(): Observable<Category[]> {
@@ -22,10 +26,17 @@ export class DataService {
   }
 
   createBasket(): Observable<Basket> {
-    return this.http.post<Basket>(`${environment.baseApiUrl}/basket`, {});
+    if (isDefined(this.basket)) {
+      return of(this.basket);
+    } else {
+      let retour: Observable<Basket> = this.http.post<Basket>(`${environment.baseApiUrl}/basket`, {});
+      retour.subscribe(b => this.basket = b);
+      return retour;
+    }
   }
 
   updateBasket(basket: Basket): Observable<Basket> {
+    this.basket = basket;
     let products = {};
     if (basket.products) {
       basket.products.forEach((v, k) => (products[k] = v));
@@ -46,6 +57,7 @@ export class DataService {
           Object.entries(data.products).forEach(k => {
             retour.products.set(parseInt(k[0]), k[1]);
           });
+          this.basket = retour;
           return retour;
         })
       );
