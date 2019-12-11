@@ -1,0 +1,57 @@
+<div *ngIf="error$ | async" class="alert alert-primary" role="alert">
+  Impossible de charger les catégories
+</div>
+
+<div *ngIf="error$ | async" class="spinner-border text-primary" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+
+<div *ngIf="!(error$ | async)" class="row">
+  <div class="col-lg-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <ng-container
+          *ngFor="let category of categoryPath$ | async; let last = last"
+        >
+          <li *ngIf="!last" class="breadcrumb-item">
+            <a [routerLink]="['/categorie', category.path]">{{
+              category.name
+            }}</a>
+          </li>
+          <li *ngIf="last" class="breadcrumb-item active" aria-current="page">
+            {{ category.name }}
+          </li>
+        </ng-container>
+      </ol>
+    </nav>
+
+    <div class="input-group">
+      <input
+        class="form-control"
+        [(ngModel)]="recherche"
+        (keyup.enter)="onSearch()"
+        type="text"
+        placeholder="Rechercher"
+      />
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" (click)="onSearch()">
+          <fa-icon [icon]="['fas', 'search']"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9">
+    <ng-container
+      *ngFor="
+        let category of categoryPath$ | async;
+        let last = last;
+        let first = first
+      "
+    >
+      <p [class.h1]="first" [class.h3]="!first">
+        {{ category.desc }}
+      </p>
+      <app-products *ngIf="last" [category]="category.id"></app-products>
+    </ng-container>
+  </div>
+</div>

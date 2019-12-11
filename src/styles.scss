@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+// Your variable overrides
+
+$primary: #f44336;
+$secondary: #ffd740;
+/**
+$body-color: $gray-900 !default;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-800 !default;
+*/
+// Bootstrap and its default variables
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+body {
+  padding-top: 72px;
+}

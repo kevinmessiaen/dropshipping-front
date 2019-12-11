@@ -1,0 +1,93 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <a class="navbar-brand" [routerLink]="['/']">
+    <fa-icon [icon]="['fas', 'star']" class="text-secondary"></fa-icon>
+    Les saveurs du Vietnam
+  </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="navbar-nav d-lg-none">
+      <a [routerLink]="['/basket']" class="nav-item nav-link">
+        Panier
+        <span class="badge badge-pill badge-secondary">{{ cartCount }}</span>
+      </a>
+      <div class="dropdown-divider"></div>
+      <ng-container
+        *ngFor="let category of leafCategories$ | async; let last = last"
+      >
+        <a
+          [routerLink]="['/categorie', category.path]"
+          routerLinkActive="active"
+          class="nav-item nav-link"
+          >{{ category.name }}</a
+        >
+      </ng-container>
+    </div>
+
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0 d-none d-lg-block">
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Catégories
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ng-container
+            *ngFor="let category of leafCategories$ | async; let last = last"
+          >
+            <a
+              [routerLink]="['/categorie', category.path]"
+              routerLinkActive="active"
+              class="dropdown-item"
+              >{{ category.name }}</a
+            >
+          </ng-container>
+        </div>
+      </li>
+    </ul>
+    <div class="form-inline">
+      <div class="input-group">
+        <input
+          class="form-control"
+          [(ngModel)]="recherche"
+          (keyup.enter)="onSearch()"
+          type="text"
+          placeholder="Rechercher"
+        />
+        <div class="input-group-append">
+          <button class="btn btn-secondary" type="button" (click)="onSearch()">
+            <fa-icon [icon]="['fas', 'search']"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <a
+      [routerLink]="['/basket']"
+      class="pull-left top-badge-container pl-3 pr-3 d-none d-lg-block"
+    >
+      <fa-icon
+        [icon]="['fas', 'shopping-cart']"
+        class="text-secondary h4"
+      ></fa-icon>
+      <span class="badge badge-pill badge-secondary pull-right badge-top-right">
+        {{ cartCount }}</span
+      >
+    </a>
+  </div>
+</nav>

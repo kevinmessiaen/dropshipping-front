@@ -1,0 +1,36 @@
+<div *ngIf="(products$ | async).length > 0" class="row">
+  <div *ngFor="let product of products$ | async" class="col-lg-4 col-md-6 mb-4">
+    <div class="card h-100">
+      <a [routerLink]="['/produit', product.path]"
+        ><img class="card-img-top" src="http://placehold.it/700x400" alt=""
+      /></a>
+      <div class="card-body">
+        <h4 class="card-title text-justify">
+          <a [routerLink]="['/produit', product.path]">{{ product.name }}</a>
+        </h4>
+        <div class="clearfix">
+          <h5 class="float-right">{{ product.price }}€</h5>
+        </div>
+        <p class="card-text text-justify">
+          {{ product.desc }}
+        </p>
+      </div>
+      <div class="card-footer">
+        <button type="button" class="btn btn-outline-primary btn-sm">
+          <fa-icon [icon]="['fas', 'star']"></fa-icon>
+          <fa-icon [icon]="['fas', 'star']"></fa-icon>
+          <fa-icon [icon]="['fas', 'star']"></fa-icon>
+          <fa-icon [icon]="['fas', 'star']"></fa-icon>
+          <fa-icon [icon]="['far', 'star']"></fa-icon>
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm float-right"
+          (click)="addToBasket(product.id)"
+        >
+          <fa-icon [icon]="['fas', 'cart-plus']"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
