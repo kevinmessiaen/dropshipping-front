@@ -4,7 +4,8 @@ import { environment } from "src/environments/environment";
 import { Category } from "../models/Category";
 import { Observable, of } from "rxjs";
 import { Product } from "../models/Product";
-import { Basket } from "../models/Basket";
+import { Basket, BasketDto } from "../models/Basket";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -20,21 +21,33 @@ export class DataService {
     return this.http.get<Product[]>(`${environment.baseApiUrl}/products`);
   }
 
-  basket: Basket = {
-    id: "test",
-    products: new Map()
-  };
-
-  getBasket(basket: string): Observable<Basket> {
-    return of(this.basket);
+  createBasket(): Observable<Basket> {
+    return this.http.post<Basket>(`${environment.baseApiUrl}/basket`, {});
   }
 
-  addToBasket(basket: string, product: number): Observable<Basket> {
-    if (this.basket.products.has(product)) {
-      this.basket.products.set(product, this.basket.products.get(product) + 1);
-    } else {
-      this.basket.products.set(product, 1);
+  updateBasket(basket: Basket): Observable<Basket> {
+    let products = {};
+    if (basket.products) {
+      basket.products.forEach((v, k) => (products[k] = v));
     }
-    return of(this.basket);
+    let data = {
+      id: basket.id,
+      products: products
+    };
+    return this.http
+      .put<BasketDto>(`${environment.baseApiUrl}/basket/${basket.id}`, data)
+      .pipe(
+        map(data => {
+          let retour: Basket = {
+            id: data.id,
+            products: new Map()
+          };
+
+          Object.entries(data.products).forEach(k => {
+            retour.products.set(parseInt(k[0]), k[1]);
+          });
+          return retour;
+        })
+      );
   }
 }

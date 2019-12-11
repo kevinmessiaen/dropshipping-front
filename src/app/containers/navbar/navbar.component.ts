@@ -41,23 +41,21 @@ export class NavbarComponent implements OnInit {
 
     this.store$.subscribe(() => {
       this.basket$ = this.store$.select(BasketSelectors.selectBasket);
+    });
 
-      this.basket$.subscribe(b => {
-        if (b != null) {
-          let c: number = 0;
-          b.products.forEach((v, k) => {
-            c += v;
-          });
-          this.cartCount = c;
-        }
-      });
+    this.basket$ = this.store$.select(BasketSelectors.selectBasket);
+
+    this.basket$.subscribe(b => {
+      if (b != null && b.products != null) {
+        let c: number = 0;
+        b.products.forEach((v, k) => {
+          c += v;
+        });
+        this.cartCount = c;
+      }
     });
 
     this.store$.dispatch(new CategoriesAction.LoadRequestAction());
-    this.store$.dispatch(
-      new BasketAction.LoadRequestAction({
-        basket: "test"
-      })
-    );
+    this.store$.dispatch(new BasketAction.LoadRequestAction());
   }
 }

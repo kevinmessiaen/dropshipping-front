@@ -7,15 +7,11 @@ export enum ActionTypes {
   LOAD_SUCCESS = "[Basket] Load Success",
   UPDATE_REQUEST = "[Basket] Add Request",
   UPDATE_FAILURE = "[Basket] Add Failure",
-  UPDATE_SUCCESS = "[Basket] Add Success",
-  ADD_REQUEST = "[Products] Add Request",
-  ADD_FAILURE = "[Products] Add Failure",
-  ADD_SUCCESS = "[Products] Add Success"
+  UPDATE_SUCCESS = "[Basket] Add Success"
 }
 
 export class LoadRequestAction implements Action {
   readonly type = ActionTypes.LOAD_REQUEST;
-  constructor(public payload: { basket: string }) {}
 }
 
 export class LoadFailureAction implements Action {
@@ -28,18 +24,18 @@ export class LoadSuccessAction implements Action {
   constructor(public payload: { basket: Basket }) {}
 }
 
-export class AddRequestAction implements Action {
-  readonly type = ActionTypes.ADD_REQUEST;
-  constructor(public payload: { basket: string; product: number }) {}
+export class UpdateRequestAction implements Action {
+  readonly type = ActionTypes.UPDATE_REQUEST;
+  constructor(public payload: { basket: Basket }) {}
 }
 
-export class AddFailureAction implements Action {
-  readonly type = ActionTypes.ADD_FAILURE;
+export class UpdateFailureAction implements Action {
+  readonly type = ActionTypes.UPDATE_FAILURE;
   constructor(public payload: { error: string }) {}
 }
 
-export class AddSuccessAction implements Action {
-  readonly type = ActionTypes.ADD_SUCCESS;
+export class UpdateSuccessAction implements Action {
+  readonly type = ActionTypes.UPDATE_SUCCESS;
   constructor(public payload: { basket: Basket }) {}
 }
 
@@ -47,6 +43,6 @@ export type Actions =
   | LoadRequestAction
   | LoadFailureAction
   | LoadSuccessAction
-  | AddRequestAction
-  | AddFailureAction
-  | AddSuccessAction;
+  | UpdateRequestAction
+  | UpdateFailureAction
+  | UpdateSuccessAction;

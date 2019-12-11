@@ -16,7 +16,7 @@ export class BasketEffects {
       featureActions.ActionTypes.LOAD_REQUEST
     ),
     switchMap(action =>
-      this.dataService.getBasket(action.payload.basket).pipe(
+      this.dataService.createBasket().pipe(
         map(
           basket =>
             new featureActions.LoadSuccessAction({
@@ -31,24 +31,22 @@ export class BasketEffects {
   );
 
   @Effect()
-  addRequestEffect$: Observable<Action> = this.actions$.pipe(
-    ofType<featureActions.AddRequestAction>(
-      featureActions.ActionTypes.ADD_REQUEST
+  updateRequestEffect$: Observable<Action> = this.actions$.pipe(
+    ofType<featureActions.UpdateRequestAction>(
+      featureActions.ActionTypes.UPDATE_REQUEST
     ),
     switchMap(action =>
-      this.dataService
-        .addToBasket(action.payload.basket, action.payload.product)
-        .pipe(
-          map(
-            basket =>
-              new featureActions.AddSuccessAction({
-                basket
-              })
-          ),
-          catchError(error =>
-            observableOf(new featureActions.AddFailureAction({ error }))
-          )
+      this.dataService.updateBasket(action.payload.basket).pipe(
+        map(
+          basket =>
+            new featureActions.UpdateSuccessAction({
+              basket
+            })
+        ),
+        catchError(error =>
+          observableOf(new featureActions.UpdateFailureAction({ error }))
         )
+      )
     )
   );
 }
