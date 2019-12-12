@@ -6,6 +6,7 @@ import {
 } from "src/app/root-store";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
+import { take } from "rxjs/operators";
 import { Category } from "src/app/models/Category";
 import {
   faStar as fasStar,
@@ -15,6 +16,8 @@ import {
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { Basket } from "src/app/models/Basket";
 import { BasketSelectors, BasketAction } from "src/app/root-store/basket-store";
+import { CategoriesService } from "src/app/services/categories.service";
+import { BasketService } from "src/app/services/basket.service";
 
 @Component({
   selector: "app-navbar",
@@ -28,34 +31,25 @@ export class NavbarComponent implements OnInit {
   cartCount: number = 0;
 
   constructor(
-    private store$: Store<RootStoreState.State>,
+    private categoriesService: CategoriesService,
+    private basketService: BasketService,
     private library: FaIconLibrary
   ) {
     library.addIcons(fasStar, fasShoppingCart, fasSearch);
   }
 
   ngOnInit() {
-    this.leafCategories$ = this.store$.select(
-      CategoriesSelectors.selectLeafCategories()
-    );
+    this.leafCategories$ = this.categoriesService.findLeafCategories();
 
-    this.store$.subscribe(() => {
-      this.basket$ = this.store$.select(BasketSelectors.selectBasket);
+    this.basketService.getUpdates().subscribe(b => {
+      let c: number = 0;
+      b.products.forEach((v, k) => {
+        c += v;
+      });
+      this.cartCount = c;
     });
 
-    this.basket$ = this.store$.select(BasketSelectors.selectBasket);
-
-    this.basket$.subscribe(b => {
-      if (b != null && b.products != null) {
-        let c: number = 0;
-        b.products.forEach((v, k) => {
-          c += v;
-        });
-        this.cartCount = c;
-      }
-    });
-
-    this.store$.dispatch(new CategoriesAction.LoadRequestAction());
-    this.store$.dispatch(new BasketAction.LoadRequestAction());
+    this.categoriesService.load();
+    this.basketService.create();
   }
 }

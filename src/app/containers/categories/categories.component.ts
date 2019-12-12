@@ -1,12 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { Category } from "src/app/models/Category";
-import { Store } from "@ngrx/store";
-import {
-  RootStoreState,
-  CategoriesSelectors,
-  CategoriesAction
-} from "src/app/root-store";
+import { CategoriesService } from "src/app/services/categories.service";
 
 @Component({
   selector: "app-categories",
@@ -15,22 +10,15 @@ import {
 })
 export class CategoriesComponent implements OnInit {
   categories$: Observable<Category[]>;
-  error$: Observable<string>;
+  error$: Observable<any>;
   isLoading$: Observable<boolean>;
 
-  constructor(private store$: Store<RootStoreState.State>) {}
+  constructor(private categoriesService: CategoriesService) {}
 
   ngOnInit() {
-    this.categories$ = this.store$.select(
-      CategoriesSelectors.selectAllCategories
-    );
-
-    this.error$ = this.store$.select(CategoriesSelectors.selectCategoriesError);
-
-    this.isLoading$ = this.store$.select(
-      CategoriesSelectors.selectCategoriesIsLoading
-    );
-
-    this.store$.dispatch(new CategoriesAction.LoadRequestAction());
+    this.categories$ = this.categoriesService.findAll();
+    this.error$ = this.categoriesService.error();
+    this.isLoading$ = this.categoriesService.isLoading();
+    this.categoriesService.load();
   }
 }
