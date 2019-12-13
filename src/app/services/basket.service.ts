@@ -45,6 +45,9 @@ export class BasketService {
         });
       this.shouldCreateOrLoad = false;
       this.store$.dispatch(new BasketAction.LoadRequestAction());
+    } else if (this.basket) {
+      console.log("emit");
+      this.basket$.emit(this.basket);
     }
   }
 

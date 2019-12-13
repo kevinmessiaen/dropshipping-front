@@ -1,12 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  RootStoreState,
-  CategoriesAction,
-  CategoriesSelectors
-} from "src/app/root-store";
-import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { take } from "rxjs/operators";
 import { Category } from "src/app/models/Category";
 import {
   faStar as fasStar,
@@ -14,8 +7,6 @@ import {
   faSearch as fasSearch
 } from "@fortawesome/free-solid-svg-icons";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
-import { Basket } from "src/app/models/Basket";
-import { BasketSelectors, BasketAction } from "src/app/root-store/basket-store";
 import { CategoriesService } from "src/app/services/categories.service";
 import { BasketService } from "src/app/services/basket.service";
 
@@ -26,7 +17,6 @@ import { BasketService } from "src/app/services/basket.service";
 })
 export class NavbarComponent implements OnInit {
   leafCategories$: Observable<Category[]>;
-  basket$: Observable<Basket>;
   recherche: string = "";
   cartCount: number = 0;
 

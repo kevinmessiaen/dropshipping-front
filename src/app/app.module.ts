@@ -14,6 +14,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { NavbarComponent } from "./containers/navbar/navbar.component";
 import { CategoryComponent } from "./containers/category/category.component";
 import { ProductsComponent } from './containers/products/products.component';
+import { BasketComponent } from './containers/basket/basket.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ProductsComponent } from './containers/products/products.component';
     CategoriesComponent,
     NavbarComponent,
     CategoryComponent,
-    ProductsComponent
+    ProductsComponent,
+    BasketComponent
   ],
   imports: [
     BrowserModule,
