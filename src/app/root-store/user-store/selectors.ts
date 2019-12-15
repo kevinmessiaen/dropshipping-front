@@ -30,12 +30,12 @@ export const selectUserIsLoading: MemoizedSelector<
   boolean
   > = createSelector(selectUserState, getIsLoading);
 
-export const selectSessionId: MemoizedSelector<object, User> = createSelector(
+export const selectSessionId: MemoizedSelector<object, string> = createSelector(
   selectUserState,
   getSessionId
 );
 
-export const selectUser: MemoizedSelector<object, Basket> = createSelector(
+export const selectUser: MemoizedSelector<object, User> = createSelector(
   selectUserState,
   getUser
 );

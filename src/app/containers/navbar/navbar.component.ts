@@ -32,6 +32,7 @@ export class NavbarComponent implements OnInit {
     this.leafCategories$ = this.categoriesService.findLeafCategories();
 
     this.basketService.getUpdates().subscribe(b => {
+      console.log(b);
       let c: number = 0;
       b.products.forEach((v, k) => {
         c += v;

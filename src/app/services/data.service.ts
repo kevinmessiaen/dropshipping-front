@@ -28,7 +28,19 @@ export class DataService {
   }
 
   getBasket(basketId: string): Observable<Basket> {
-    return this.http.post<Basket>(`${environment.baseApiUrl}/basket/${basketId}`, {});
+    return this.http.get<Basket>(`${environment.baseApiUrl}/basket/${basketId}`, {})
+      .pipe(map(data => {
+          let retour: Basket = {
+            id: data.id,
+            products: new Map()
+          };
+
+          Object.entries(data.products).forEach(k => {
+            retour.products.set(parseInt(k[0]), k[1]);
+          });
+          return retour;
+        })
+      );
   }
 
   updateBasket(basket: Basket): Observable<Basket> {

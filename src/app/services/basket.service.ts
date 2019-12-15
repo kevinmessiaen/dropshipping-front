@@ -1,10 +1,11 @@
-import { Injectable, EventEmitter } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { RootStoreState } from "../root-store";
-import { BasketAction, BasketSelectors } from "../root-store/basket-store";
-import { Basket } from "../models/Basket";
-import { debounceTime, take } from "rxjs/operators";
+import {EventEmitter, Injectable} from "@angular/core";
+import {Store} from "@ngrx/store";
+import {RootStoreState} from "../root-store";
+import {BasketAction, BasketSelectors} from "../root-store/basket-store";
+import {Basket} from "../models/Basket";
+import {debounceTime, take} from "rxjs/operators";
 import {isDefined} from "@angular/compiler/src/util";
+import {Subscription} from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -33,7 +34,20 @@ export class BasketService {
     if (this.shouldCreateOrLoad) {
       let basketId = localStorage.getItem("basketId");
 
-      let subscription = this.store$
+      let errorSub: Subscription;
+      let subscription: Subscription;
+
+      if (isDefined(basketId)) {
+        errorSub = this.store$.select(BasketSelectors.selectBasketsError).subscribe((e) => {
+          if (e) {
+            localStorage.removeItem("basketId");
+            errorSub.unsubscribe();
+            subscription.unsubscribe();
+            this.create();
+          }
+        })
+      }
+      subscription = this.store$
         .select(BasketSelectors.selectBasket)
         .pipe()
         .subscribe((b: Basket) => {
@@ -44,10 +58,14 @@ export class BasketService {
             this.basket = b;
             localStorage.setItem("basketId", this.basket.id);
             this.basket$.emit(b);
+            if (isDefined(errorSub)) {
+              errorSub.unsubscribe();
+            }
             subscription.unsubscribe();
           }
         });
       this.shouldCreateOrLoad = false;
+
       if (isDefined(basketId)) {
         this.store$.dispatch(new BasketAction.LoadRequestAction({
           basketId
@@ -66,9 +84,9 @@ export class BasketService {
     let basket = this.basket
       ? this.basket
       : await this.basket$
-          .pipe(take(1))
-          .toPromise()
-          .then(b => b);
+        .pipe(take(1))
+        .toPromise()
+        .then(b => b);
     if (basket.products.has(productId)) {
       basket.products.set(productId, basket.products.get(productId) + 1);
     } else {
