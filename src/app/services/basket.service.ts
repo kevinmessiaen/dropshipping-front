@@ -4,6 +4,7 @@ import { RootStoreState } from "../root-store";
 import { BasketAction, BasketSelectors } from "../root-store/basket-store";
 import { Basket } from "../models/Basket";
 import { debounceTime, take } from "rxjs/operators";
+import {isDefined} from "@angular/compiler/src/util";
 
 @Injectable({
   providedIn: "root"
@@ -30,6 +31,8 @@ export class BasketService {
 
   create() {
     if (this.shouldCreateOrLoad) {
+      let basketId = localStorage.getItem("basketId");
+
       let subscription = this.store$
         .select(BasketSelectors.selectBasket)
         .pipe()
@@ -39,12 +42,20 @@ export class BasketService {
               b.products = new Map();
             }
             this.basket = b;
+            localStorage.setItem("basketId", this.basket.id);
             this.basket$.emit(b);
             subscription.unsubscribe();
           }
         });
       this.shouldCreateOrLoad = false;
-      this.store$.dispatch(new BasketAction.LoadRequestAction());
+      if (isDefined(basketId)) {
+        this.store$.dispatch(new BasketAction.LoadRequestAction({
+          basketId
+        }));
+      } else {
+        this.store$.dispatch(new BasketAction.CreateRequestAction());
+      }
+
     } else if (this.basket) {
       console.log("emit");
       this.basket$.emit(this.basket);

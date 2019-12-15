@@ -22,6 +22,25 @@ export function basketReducer(state = initialState, action: Actions): State {
         error: action.payload.error,
         isLoading: false
       };
+    case ActionTypes.CREATE_REQUEST:
+      return {
+        ...state,
+        error: null,
+        isLoading: true
+      };
+    case ActionTypes.CREATE_SUCCESS:
+      return {
+        ...state,
+        basket: action.payload.basket,
+        error: null,
+        isLoading: false
+      };
+    case ActionTypes.CREATE_FAILURE:
+      return {
+        ...state,
+        error: action.payload.error,
+        isLoading: false
+      };
     case ActionTypes.UPDATE_REQUEST:
       return {
         ...state,

@@ -1,21 +1,19 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { Category } from "../models/Category";
-import { Observable, of } from "rxjs";
-import { Product } from "../models/Product";
-import { Basket, BasketDto } from "../models/Basket";
-import { map } from "rxjs/operators";
-import { isDefined } from '@angular/compiler/src/util';
+import {Injectable} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "src/environments/environment";
+import {Category} from "../models/Category";
+import {Observable} from "rxjs";
+import {Product} from "../models/Product";
+import {Basket, BasketDto} from "../models/Basket";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataService {
 
-   basket: Basket = null;
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(`${environment.baseApiUrl}/categories`);
@@ -26,17 +24,14 @@ export class DataService {
   }
 
   createBasket(): Observable<Basket> {
-    if (isDefined(this.basket)) {
-      return of(this.basket);
-    } else {
-      let retour: Observable<Basket> = this.http.post<Basket>(`${environment.baseApiUrl}/basket`, {});
-      retour.subscribe(b => this.basket = b);
-      return retour;
-    }
+    return this.http.post<Basket>(`${environment.baseApiUrl}/basket`, {});
+  }
+
+  getBasket(basketId: string): Observable<Basket> {
+    return this.http.post<Basket>(`${environment.baseApiUrl}/basket/${basketId}`, {});
   }
 
   updateBasket(basket: Basket): Observable<Basket> {
-    this.basket = basket;
     let products = {};
     if (basket.products) {
       basket.products.forEach((v, k) => (products[k] = v));
@@ -57,7 +52,6 @@ export class DataService {
           Object.entries(data.products).forEach(k => {
             retour.products.set(parseInt(k[0]), k[1]);
           });
-          this.basket = retour;
           return retour;
         })
       );

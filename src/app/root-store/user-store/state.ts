@@ -1,13 +1,15 @@
-import {Basket} from "src/app/models/Basket";
+import {User} from "../../models/User";
 
 export interface State {
-  basket: Basket | null;
+  sessionId: string;
+  user: User | null;
   isLoading: boolean;
   error: string;
 }
 
 export const initialState: State = {
-  basket: null,
+  sessionId: null,
+  user: null,
   isLoading: false,
   error: null
 };
