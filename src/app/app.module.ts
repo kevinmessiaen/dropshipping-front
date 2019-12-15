@@ -15,6 +15,7 @@ import { NavbarComponent } from "./containers/navbar/navbar.component";
 import { CategoryComponent } from "./containers/category/category.component";
 import { ProductsComponent } from './containers/products/products.component';
 import { BasketComponent } from './containers/basket/basket.component';
+import { HomeComponent } from './containers/home/home.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { BasketComponent } from './containers/basket/basket.component';
     NavbarComponent,
     CategoryComponent,
     ProductsComponent,
-    BasketComponent
+    BasketComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar *ngIf="router.url !== '/'"></app-navbar>
 
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>
+

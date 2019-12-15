@@ -1,11 +1,15 @@
-<div *ngIf="error$ | async" class="alert alert-primary" role="alert">
-  Impossible de charger les catégories
-</div>
+<div class="under-nav">
+  <div class="container pt-4">
+    <div *ngIf="error$ | async" class="alert alert-primary" role="alert">
+      Impossible de charger les catégories
+    </div>
 
-<div *ngIf="error$ | async" class="spinner-border text-primary" role="status">
-  <span class="sr-only">Loading...</span>
-</div>
+    <div *ngIf="error$ | async" class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
 
-<div *ngFor="let category of categories$ | async">
-  {{ category.name }}
+    <div *ngFor="let category of categories$ | async">
+      {{ category.name }}
+    </div>
+  </div>
 </div>

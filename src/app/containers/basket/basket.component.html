@@ -1,5 +1,9 @@
-<h1>Basket ({{ basket?.id }})</h1>
+<div class="under-nav">
+  <div class="container pt-4">
+    <h1>Basket ({{ basket?.id }})</h1>
 
-<div *ngFor="let product of basket?.products | keyvalue">
-  Product {{ product.key }} x{{ product.value }}
+    <div *ngFor="let product of basket?.products | keyvalue">
+      Product {{ product.key }} x{{ product.value }}
+    </div>
+  </div>
 </div>

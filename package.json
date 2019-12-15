@@ -31,6 +31,7 @@
     "@ngrx/store": "^8.5.2",
     "@ngrx/store-devtools": "^8.5.2",
     "bootstrap": "^4.4.1",
+    "jarallax": "^1.12.0",
     "jquery": "^3.4.1",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0",

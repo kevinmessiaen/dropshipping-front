@@ -3,7 +3,6 @@ import { Basket } from "src/app/models/Basket";
 import { BasketService } from "src/app/services/basket.service";
 import { Observable, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { Socket } from "net";
 
 @Component({
   selector: "app-basket",
