@@ -16,6 +16,8 @@ import { CategoryComponent } from "./containers/category/category.component";
 import { ProductsComponent } from './containers/products/products.component';
 import { BasketComponent } from './containers/basket/basket.component';
 import { HomeComponent } from './containers/home/home.component';
+import { LoginComponent } from './containers/login/login.component';
+import { InscriptionComponent } from './containers/inscription/inscription.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { HomeComponent } from './containers/home/home.component';
     CategoryComponent,
     ProductsComponent,
     BasketComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent,
+    InscriptionComponent
   ],
   imports: [
     BrowserModule,
