@@ -5,6 +5,7 @@ import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { ProductsStoreModule } from "./products-store";
 import { BasketStoreModule } from "./basket-store";
+import {UserStoreModule} from "./user-store";
 
 @NgModule({
   declarations: [],
@@ -13,6 +14,7 @@ import { BasketStoreModule } from "./basket-store";
     CategoriesStoreModule,
     ProductsStoreModule,
     BasketStoreModule,
+    UserStoreModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([])
   ]

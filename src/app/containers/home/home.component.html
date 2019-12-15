@@ -1,13 +1,11 @@
 <nav class="navbar navbar-light white">
-  <span class="navbar-brand mb-0 h1">Les saveurs du Vietnam
+  <span class="navbar-brand mb-0 h1">Les saveurs du Vietnam</span>
 
-  </span>
-
-  <nav class="navbar navbar-light bg-light">
-    <form class="form-inline">
-      <button class="navbar-brand mb-0 h1 pull-right" type="button" class="btn btn-primary" [routerLink]="['/login']">Login</button>
-    </form>
-  </nav>
+  <form class="form-inline">
+    <button class="btn btn-primary" type="button" data-toggle="modal"
+            data-target="#loginModal">Connexion
+    </button>
+  </form>
 </nav>
 
 <div class="jarallax"
@@ -96,3 +94,5 @@
     </div>
   </div>
 </footer>
+
+<app-login></app-login>

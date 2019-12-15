@@ -1,11 +1,12 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "src/environments/environment";
 import {Category} from "../models/Category";
 import {Observable} from "rxjs";
 import {Product} from "../models/Product";
 import {Basket, BasketDto} from "../models/Basket";
 import {map} from "rxjs/operators";
+import {User} from "../models/User";
 
 @Injectable({
   providedIn: "root"
@@ -13,6 +14,22 @@ import {map} from "rxjs/operators";
 export class DataService {
 
   constructor(private http: HttpClient) {
+  }
+
+  login(username: string, password: string): Observable<any> {
+    let formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+
+    return this.http.post(`${environment.baseApiUrl}/login`, formData, {
+      withCredentials: true
+    });
+  }
+
+  getUser(): Observable<User> {
+    return this.http.get<User>(`${environment.baseApiUrl}/restricted/user`, {
+      withCredentials: true
+    });
   }
 
   getCategories(): Observable<Category[]> {

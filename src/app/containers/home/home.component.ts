@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import 'jarallax';
+import {UserService} from "../../services/user.service";
 declare var jarallax: any;
 
 @Component({
