@@ -8,6 +8,7 @@ import {
 import { UserService } from "../../services/user.service";
 import { Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
+import { isDefined } from "@angular/compiler/src/util";
 
 @Component({
   selector: "app-login",
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   error$: Observable<String>;
   subcribtion: Subscription;
 
+  validate: boolean = false;
   username: string;
   password: string;
 
@@ -38,7 +40,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {
-    this.userService.login(this.username, this.password);
+    this.validate = true;
+    if (
+      isDefined(this.username) &&
+      this.username.length >= 4 &&
+      this.username.length <= 32 &&
+      isDefined(this.password) &&
+      this.password.length > 0
+    ) {
+      this.userService.login(this.username, this.password);
+    } else {
+      this.username = this.username;
+      this.password = this.password;
+    }
+    console.log(
+      this.validate && !(isDefined(this.password) && this.password.length > 0)
+    );
   }
 
   ngOnDestroy() {

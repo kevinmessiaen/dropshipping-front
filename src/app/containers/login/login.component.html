@@ -19,28 +19,52 @@
           <label for="loginUsername" class="col-sm-4 col-form-label"
             >Identifiant:</label
           >
-          <div class="col-sm-8">
+          <div class="col-sm-8" [class.validate]="validate">
             <input
               type="text"
               class="form-control"
               id="loginUsername"
               placeholder="Identifiant"
               [(ngModel)]="username"
+              #loginUsername="ngModel"
+              (keyup.enter)="login()"
+              required
+              minlength="4"
+              maxlength="32"
             />
+            <div *ngIf="validate && loginUsername.invalid" class="text-danger">
+              <div *ngIf="loginUsername.errors.required">
+                Le nom d'utilisateur est requis.
+              </div>
+              <div *ngIf="loginUsername.errors.minlength">
+                Le nom d'utilisateur doit faire au moins 4 charactères.
+              </div>
+              <div *ngIf="loginUsername.errors.maxlength">
+                Le nom d'utilisateur doit faire au plus 32 charactères.
+              </div>
+            </div>
           </div>
         </div>
         <div class="form-group row">
           <label for="loginPassword" class="col-sm-4 col-form-label"
             >Mot de passe:</label
           >
-          <div class="col-sm-8">
+          <div class="col-sm-8" [class.validate]="validate">
             <input
               type="password"
               class="form-control"
               id="loginPassword"
               placeholder="Mot de passe"
               [(ngModel)]="password"
+              #loginPassword="ngModel"
+              (keyup.enter)="login()"
+              required
             />
+            <div *ngIf="validate && loginPassword.invalid" class="text-danger">
+              <div *ngIf="loginPassword.errors.required">
+                Le nom mot de passe est requis.
+              </div>
+            </div>
           </div>
         </div>
         <div
