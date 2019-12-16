@@ -1,0 +1,38 @@
+<!-- The Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="registerModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Inscription</h5>
+        <button
+          #closeRegisterModal
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"  (click)="login()">Se connecter</button>
+        <button type="button" class="btn btn-primary" (click)="register()">
+          S'inscrire
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <button
+    class="btn btn-primary d-none"
+    type="button"
+    data-toggle="modal"
+    data-target="#loginModal"
+    #openLoginModal
+  >
+  </button>

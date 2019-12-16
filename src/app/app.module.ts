@@ -17,7 +17,7 @@ import { ProductsComponent } from "./containers/products/products.component";
 import { BasketComponent } from "./containers/basket/basket.component";
 import { HomeComponent } from "./containers/home/home.component";
 import { LoginComponent } from "./containers/login/login.component";
-import { InscriptionComponent } from "./containers/inscription/inscription.component";
+import { RegisterComponent } from "./containers/register/register.component";
 import { StoreComponent } from "./containers/store/store.component";
 import { PageNotFoundComponent } from "./containers/page-not-found/page-not-found.component";
 import { BasicAuthInterceptor } from "./basic-auth.interceptor";
@@ -32,7 +32,7 @@ import { BasicAuthInterceptor } from "./basic-auth.interceptor";
     BasketComponent,
     HomeComponent,
     LoginComponent,
-    InscriptionComponent,
+    RegisterComponent,
     StoreComponent,
     PageNotFoundComponent
   ],

@@ -23,10 +23,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   username: string;
   password: string;
 
-  constructor(private userService: UserService, private router: Router) {}
-
   @ViewChild("closeLoginModal", { static: false })
   private closeModal: ElementRef;
+
+  @ViewChild("openRegisterModal", { static: false })
+  private openRegisterModal: ElementRef;
+
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
     this.error$ = this.userService.error();
@@ -49,13 +52,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.password.length > 0
     ) {
       this.userService.login(this.username, this.password);
-    } else {
-      this.username = this.username;
-      this.password = this.password;
     }
     console.log(
       this.validate && !(isDefined(this.password) && this.password.length > 0)
     );
+  }
+
+  register() {
+    this.closeModal.nativeElement.click();
+    this.openRegisterModal.nativeElement.click();
   }
 
   ngOnDestroy() {
