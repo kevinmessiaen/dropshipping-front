@@ -1,18 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light white">
   <span class="navbar-brand mb-0 h1">Les saveurs du Vietnam</span>
 
-  <form *ngIf="!(isLogged$ | async)" class="form-inline ml-auto">
-    <button
-      class="btn btn-primary"
-      type="button"
-      data-toggle="modal"
-      data-target="#loginModal"
-    >
-      Connexion
-    </button>
-  </form>
   <button
-    *ngIf="user$ | async"
     class="navbar-toggler"
     type="button"
     data-toggle="collapse"
@@ -23,13 +12,14 @@
   >
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div
-    *ngIf="user$ | async"
-    class="collapse navbar-collapse"
-    id="userNavDropdown"
-  >
+  <div class="collapse navbar-collapse" id="userNavDropdown">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/store']">La boutique</a>
+      </li>
+    </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
+      <li *ngIf="user$ | async" class="nav-item dropdown ml-auto">
         <a
           class="nav-link dropdown-toggle"
           href="#"
@@ -45,13 +35,22 @@
           class="dropdown-menu dropdown-menu-right"
           aria-labelledby="userNavbarDropdownMenuLink"
         >
-          <a class="dropdown-item" [routerLink]="['/store']">La boutique</a>
           <a class="dropdown-item" href="#" (click)="logout()"
             >Se déconnecter</a
           >
         </div>
       </li>
     </ul>
+    <form *ngIf="!(isLogged$ | async)" class="form-inline ml-auto">
+      <button
+        class="btn btn-primary"
+        type="button"
+        data-toggle="modal"
+        data-target="#loginModal"
+      >
+        Connexion
+      </button>
+    </form>
   </div>
 </nav>
 
@@ -157,7 +156,13 @@
             <h5 class="h4 mb-3 mt-1">
               Séléctionnés par nos soins auprès de producteurs résponsables
             </h5>
-            <button type="button" class="btn btn-primary">Acheter</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              [routerLink]="['/store']"
+            >
+              Acheter
+            </button>
           </div>
         </div>
       </div>
