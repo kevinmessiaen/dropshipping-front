@@ -66,6 +66,25 @@ export const selectCategoryByPath = (path: string) =>
     }
   });
 
+export const selectAllChildrenIds = (id: number) =>
+  createSelector(selectAllCategories, (selectAllCategories: Category[]) => {
+    if (selectAllCategories) {
+      let childrenFunc = function name(pid: number): Category[] {
+        let res = [selectAllCategories.find(c => c.id === pid)];
+        let children = selectAllCategories.filter(c => c.parent === pid);
+        children.forEach(parent =>
+          childrenFunc(parent.id).forEach(child => res.push(child))
+        );
+        return res;
+      };
+      let ids = [];
+      childrenFunc(id).forEach(child => ids.push(child.id));
+      return ids;
+    } else {
+      return null;
+    }
+  });
+
 export const selectCategoriesError: MemoizedSelector<
   object,
   any

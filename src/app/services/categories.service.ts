@@ -35,6 +35,10 @@ export class CategoriesService {
     return this.store$.select(CategoriesSelectors.selectLeafCategories());
   }
 
+  findChildrenIds(id: number): Observable<number[]> {
+    return this.store$.select(CategoriesSelectors.selectAllChildrenIds(id));
+  }
+
   error(): Observable<boolean> {
     return this.store$.select(CategoriesSelectors.selectCategoriesIsLoading);
   }

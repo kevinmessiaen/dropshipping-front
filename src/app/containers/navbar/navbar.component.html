@@ -60,22 +60,6 @@
         </div>
       </li>
     </ul>
-    <div class="form-inline">
-      <div class="input-group">
-        <input
-          class="form-control"
-          [(ngModel)]="recherche"
-          (keyup.enter)="onSearch()"
-          type="text"
-          placeholder="Rechercher"
-        />
-        <div class="input-group-append">
-          <button class="btn btn-secondary" type="button" (click)="onSearch()">
-            <fa-icon [icon]="['fas', 'search']"></fa-icon>
-          </button>
-        </div>
-      </div>
-    </div>
 
     <a
       [routerLink]="['/basket']"

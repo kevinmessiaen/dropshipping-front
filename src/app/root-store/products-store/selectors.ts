@@ -30,6 +30,15 @@ export const selectAllProductsByCategoryId = (id: number) =>
     }
   });
 
+export const selectAllProductsByCategoryIds = (ids: number[]) =>
+  createSelector(selectAllProducts, (selectAllProducts: Product[]) => {
+    if (selectAllProducts) {
+      return selectAllProducts.filter(p => ids.includes(p.categoryId));
+    } else {
+      return null;
+    }
+  });
+
 export const selectAllProductsInBasket = (basket: Basket) =>
   createSelector(selectAllProducts, (selectAllProducts: Product[]) => {
     if (selectAllProducts) {

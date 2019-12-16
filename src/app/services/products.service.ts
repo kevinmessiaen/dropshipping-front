@@ -34,6 +34,12 @@ export class ProductsService {
     );
   }
 
+  findByCategoryIds(categoryIds: number[]): Observable<Product[]> {
+    return this.store$.select(
+      ProductsSelectors.selectAllProductsByCategoryIds(categoryIds)
+    );
+  }
+
   findInBasket(basket: Basket): Observable<Product[]> {
     return this.store$.select(
       ProductsSelectors.selectAllProductsInBasket(basket)
