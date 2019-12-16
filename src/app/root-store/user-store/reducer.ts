@@ -7,19 +7,21 @@ export function userReducer(state = initialState, action: Actions): State {
       return {
         ...state,
         error: null,
+        isLogged: false,
         isLoading: true
       };
     case ActionTypes.LOGIN_SUCCESS:
       return {
         ...state,
-        sessionId: action.payload.sessionId,
         error: null,
+        isLogged: true,
         isLoading: false
       };
     case ActionTypes.LOGIN_FAILURE:
       return {
         ...state,
         error: action.payload.error,
+        isLogged: false,
         isLoading: false
       };
     case ActionTypes.LOAD_REQUEST:
@@ -33,12 +35,14 @@ export function userReducer(state = initialState, action: Actions): State {
         ...state,
         user: action.payload.user,
         error: null,
+        isLogged: true,
         isLoading: false
       };
     case ActionTypes.LOAD_FAILURE:
       return {
         ...state,
         error: action.payload.error,
+        isLogged: false,
         isLoading: false
       };
     default: {

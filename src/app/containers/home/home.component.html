@@ -1,24 +1,42 @@
 <nav class="navbar navbar-light white">
   <span class="navbar-brand mb-0 h1">Les saveurs du Vietnam</span>
 
-  <form class="form-inline">
-    <button class="btn btn-primary" type="button" data-toggle="modal"
-            data-target="#loginModal">Connexion
+  <form *ngIf="!(isLogged$ | async)" class="form-inline">
+    <button
+      class="btn btn-primary"
+      type="button"
+      data-toggle="modal"
+      data-target="#loginModal"
+    >
+      Connexion
     </button>
   </form>
+  <span *ngIf="user$ | async" class="navbar-text">
+    {{ (user$ | async)?.username }}
+  </span>
 </nav>
 
-<div class="jarallax"
-     style="background-image: url(assets/img/parallax/cafe-glace.gif); background-attachment: fixed; height: 600px;">
+<div
+  class="jarallax"
+  style="background-image: url(assets/img/parallax/cafe-glace.gif); background-attachment: fixed; height: 600px;"
+>
   <div class="container">
-    <div class="d-flex align-items-center d-flex justify-content-center" style="height: 600px">
+    <div
+      class="d-flex align-items-center d-flex justify-content-center"
+      style="height: 600px"
+    >
       <div class="row mt-5">
         <div class="col-md-12 mb-3">
           <div class="text-center text-white">
-            <h2 class="display-4 mb-2">Les saveurs du Vietnam
-            </h2>
+            <h2 class="display-4 mb-2">Les saveurs du Vietnam</h2>
             <h5 class="h2 mb-3 mt-1">De délicieux produits de qualités.</h5>
-            <button type="button" class="btn btn-primary" (click)="scroll(valeurs)">En savoir plus</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="scroll(valeurs)"
+            >
+              En savoir plus
+            </button>
           </div>
         </div>
       </div>
@@ -34,44 +52,72 @@
   <div class="row">
     <div class="col-12 col-md-6 col-lg-4 px-4 pb-4">
       <div class="text-center">
-        <img src="assets/img/icons/ecology.png" alt="Biologique" style="width: 64px"/>
+        <img
+          src="assets/img/icons/ecology.png"
+          alt="Biologique"
+          style="width: 64px"
+        />
       </div>
       <h4 class="text-center pb-2">Biologique</h4>
-      <p class="text-justify">Nous avons fait le choix de vous vendre uniquement des produits issus de l'agriculture
-        biologique. Non seulement ils seront plus sain pour votre corp mais ils permettent de respecter les terres
-        vietnamiennes où vos produits seront cultivés.</p>
+      <p class="text-justify">
+        Nous avons fait le choix de vous vendre uniquement des produits issus de
+        l'agriculture biologique. Non seulement ils seront plus sain pour votre
+        corp mais ils permettent de respecter les terres vietnamiennes où vos
+        produits seront cultivés.
+      </p>
     </div>
     <div class="col-12 col-md-6 col-lg-4">
       <div class="text-center">
-        <img src="assets/img/icons/balance-scale.png" alt="Éthique" style="width: 64px"/>
+        <img
+          src="assets/img/icons/balance-scale.png"
+          alt="Éthique"
+          style="width: 64px"
+        />
       </div>
       <h4 class="text-center pb-2">Éthique</h4>
-      <p class="text-justify">Lorsque vous faite des achats sur <strong>les saveurs du Vietnam</strong>, vous êtes sûr
-        que les agriculteurs et commerçants seront rémunérés de manière juste. Nous sommes particulièrement attachés à
-        maintenir une relation de confiance avec nos partenaires.</p>
+      <p class="text-justify">
+        Lorsque vous faite des achats sur
+        <strong>les saveurs du Vietnam</strong>, vous êtes sûr que les
+        agriculteurs et commerçants seront rémunérés de manière juste. Nous
+        sommes particulièrement attachés à maintenir une relation de confiance
+        avec nos partenaires.
+      </p>
     </div>
     <div class="col-12 col-md-6 col-lg-4">
       <div class="text-center">
-        <img src="assets/img/icons/tote-bag.png" alt="Écologique" style="width: 64px"/>
+        <img
+          src="assets/img/icons/tote-bag.png"
+          alt="Écologique"
+          style="width: 64px"
+        />
       </div>
       <h4 class="text-center b-2">Écologique</h4>
-      <p class="text-justify">En plus de vous fornir des produits biologiques, nous nous assurons de minimiser au mieux
-        que possible l'emprunte carbonne des produits achetés en nous souciant par nous même de l'embalage et du
-        transport depuis le Vietnam jusqu'à nos boutique ou votre porte.</p>
+      <p class="text-justify">
+        En plus de vous fornir des produits biologiques, nous nous assurons de
+        minimiser au mieux que possible l'emprunte carbonne des produits achetés
+        en nous souciant par nous même de l'embalage et du transport depuis le
+        Vietnam jusqu'à nos boutique ou votre porte.
+      </p>
     </div>
   </div>
 </div>
 
-<div class="jarallax"
-     style="background-image: url(assets/img/parallax/cafe-rustique.gif); background-attachment: fixed; height: 300px;">
+<div
+  class="jarallax"
+  style="background-image: url(assets/img/parallax/cafe-rustique.gif); background-attachment: fixed; height: 300px;"
+>
   <div class="container">
-    <div class="d-flex align-items-center d-flex justify-content-center" style="height: 300px">
+    <div
+      class="d-flex align-items-center d-flex justify-content-center"
+      style="height: 300px"
+    >
       <div class="row mt-5">
         <div class="col-md-12 mb-3">
           <div class="text-center text-white">
-            <h2 class="h2mb-2">Visiter notre séléction de cafés
-            </h2>
-            <h5 class="h4 mb-3 mt-1">Séléctionnés par nos soins auprès de producteurs résponsables</h5>
+            <h2 class="h2mb-2">Visiter notre séléction de cafés</h2>
+            <h5 class="h4 mb-3 mt-1">
+              Séléctionnés par nos soins auprès de producteurs résponsables
+            </h5>
             <button type="button" class="btn btn-primary">Acheter</button>
           </div>
         </div>
@@ -95,4 +141,4 @@
   </div>
 </footer>
 
-<app-login></app-login>
+<app-login *ngIf="!(isLogged$ | async)"></app-login>

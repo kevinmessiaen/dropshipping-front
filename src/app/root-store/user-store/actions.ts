@@ -1,5 +1,5 @@
-import {Action} from "@ngrx/store";
-import {User} from "../../models/User";
+import { Action } from "@ngrx/store";
+import { User } from "../../models/User";
 
 export enum ActionTypes {
   LOGIN_REQUEST = "[User] Login Request",
@@ -13,43 +13,33 @@ export enum ActionTypes {
 export class LoginRequestAction implements Action {
   readonly type = ActionTypes.LOGIN_REQUEST;
 
-  constructor(public payload: { username: string; password: string }) {
-  }
+  constructor(public payload: { username: string; password: string }) {}
 }
 
 export class LoginFailureAction implements Action {
   readonly type = ActionTypes.LOGIN_FAILURE;
 
-  constructor(public payload: { error: string }) {
-  }
+  constructor(public payload: { error: string }) {}
 }
 
 export class LoginSuccessAction implements Action {
   readonly type = ActionTypes.LOGIN_SUCCESS;
-
-  constructor(public payload: { sessionId: string }) {
-  }
 }
 
 export class LoadRequestAction implements Action {
   readonly type = ActionTypes.LOAD_REQUEST;
-
-  constructor(public payload: { sessionId: string }) {
-  }
 }
 
 export class LoadFailureAction implements Action {
   readonly type = ActionTypes.LOAD_FAILURE;
 
-  constructor(public payload: { error: string }) {
-  }
+  constructor(public payload: { error: string }) {}
 }
 
 export class LoadSuccessAction implements Action {
   readonly type = ActionTypes.LOAD_SUCCESS;
 
-  constructor(public payload: { user: User }) {
-  }
+  constructor(public payload: { user: User }) {}
 }
 
 export type Actions =

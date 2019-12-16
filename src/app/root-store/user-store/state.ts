@@ -1,15 +1,15 @@
-import {User} from "../../models/User";
+import { User } from "../../models/User";
 
 export interface State {
-  sessionId: string;
   user: User | null;
+  isLogged: boolean;
   isLoading: boolean;
   error: string;
 }
 
 export const initialState: State = {
-  sessionId: null,
   user: null,
+  isLogged: localStorage.getItem("isLogged") == "true",
   isLoading: false,
   error: null
 };

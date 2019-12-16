@@ -5,20 +5,20 @@ import {
 } from "@ngrx/store";
 
 import { State } from "./state";
-import {User} from "../../models/User";
+import { User } from "../../models/User";
 
 export const getError = (state: State): any => state.error;
 
 export const getIsLoading = (state: State): boolean => state.isLoading;
 
-const getSessionId = (state: State): any => state.sessionId;
+const getIsLogged = (state: State): any => state.isLogged;
 
 const getUser = (state: State): any => state.user;
 
 export const selectUserState: MemoizedSelector<
   object,
   State
-  > = createFeatureSelector<State>("user");
+> = createFeatureSelector<State>("user");
 
 export const selectUserError: MemoizedSelector<object, any> = createSelector(
   selectUserState,
@@ -28,11 +28,11 @@ export const selectUserError: MemoizedSelector<object, any> = createSelector(
 export const selectUserIsLoading: MemoizedSelector<
   object,
   boolean
-  > = createSelector(selectUserState, getIsLoading);
+> = createSelector(selectUserState, getIsLoading);
 
-export const selectSessionId: MemoizedSelector<object, string> = createSelector(
+export const selectIsLogged: MemoizedSelector<object, boolean> = createSelector(
   selectUserState,
-  getSessionId
+  getIsLogged
 );
 
 export const selectUser: MemoizedSelector<object, User> = createSelector(
