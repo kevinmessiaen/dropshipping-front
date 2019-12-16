@@ -7,7 +7,10 @@ export enum ActionTypes {
   LOGIN_SUCCESS = "[User] Login Success",
   LOAD_REQUEST = "[User] Load Request",
   LOAD_FAILURE = "[User] Load Failure",
-  LOAD_SUCCESS = "[User] Load Success"
+  LOAD_SUCCESS = "[User] Load Success",
+  LOGOUT_REQUEST = "[User] Logout Request",
+  LOGOUT_FAILURE = "[User] Logout Failure",
+  LOGOUT_SUCCESS = "[User] Logout Success"
 }
 
 export class LoginRequestAction implements Action {
@@ -42,10 +45,27 @@ export class LoadSuccessAction implements Action {
   constructor(public payload: { user: User }) {}
 }
 
+export class LogoutRequestAction implements Action {
+  readonly type = ActionTypes.LOGOUT_REQUEST;
+}
+
+export class LogoutFailureAction implements Action {
+  readonly type = ActionTypes.LOGOUT_FAILURE;
+
+  constructor(public payload: { error: string }) {}
+}
+
+export class LogoutSuccessAction implements Action {
+  readonly type = ActionTypes.LOGOUT_SUCCESS;
+}
+
 export type Actions =
   | LoginRequestAction
   | LoginFailureAction
   | LoginSuccessAction
   | LoadRequestAction
   | LoadFailureAction
-  | LoadSuccessAction;
+  | LoadSuccessAction
+  | LogoutRequestAction
+  | LogoutFailureAction
+  | LogoutSuccessAction;

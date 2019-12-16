@@ -45,6 +45,28 @@ export function userReducer(state = initialState, action: Actions): State {
         isLogged: false,
         isLoading: false
       };
+    case ActionTypes.LOGOUT_REQUEST:
+      return {
+        ...state,
+        error: null,
+        isLoading: true
+      };
+    case ActionTypes.LOGOUT_SUCCESS:
+      return {
+        ...state,
+        user: null,
+        error: null,
+        isLogged: false,
+        isLoading: false
+      };
+    case ActionTypes.LOGOUT_FAILURE:
+      return {
+        ...state,
+        user: null,
+        error: action.payload.error,
+        isLogged: false,
+        isLoading: false
+      };
     default: {
       return state;
     }

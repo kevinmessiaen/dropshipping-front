@@ -46,4 +46,19 @@ export class UserEffects {
       )
     )
   );
+
+  @Effect()
+  logoutRequestEffect$: Observable<Action> = this.actions$.pipe(
+    ofType<featureActions.LogoutRequestAction>(
+      featureActions.ActionTypes.LOGOUT_REQUEST
+    ),
+    switchMap(action =>
+      this.dataService.logout().pipe(
+        map(() => new featureActions.LogoutSuccessAction()),
+        catchError(error =>
+          observableOf(new featureActions.LogoutFailureAction({ error }))
+        )
+      )
+    )
+  );
 }

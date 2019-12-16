@@ -1,27 +1,31 @@
-import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {environment} from "src/environments/environment";
-import {Category} from "../models/Category";
-import {Observable} from "rxjs";
-import {Product} from "../models/Product";
-import {Basket, BasketDto} from "../models/Basket";
-import {map} from "rxjs/operators";
-import {User} from "../models/User";
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from "src/environments/environment";
+import { Category } from "../models/Category";
+import { Observable } from "rxjs";
+import { Product } from "../models/Product";
+import { Basket, BasketDto } from "../models/Basket";
+import { map } from "rxjs/operators";
+import { User } from "../models/User";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataService {
-
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   login(username: string, password: string): Observable<any> {
     let formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
+    formData.append("username", username);
+    formData.append("password", password);
 
     return this.http.post(`${environment.baseApiUrl}/login`, formData, {
+      withCredentials: true
+    });
+  }
+
+  logout(): Observable<any> {
+    return this.http.get(`${environment.baseApiUrl}/logout`, {
       withCredentials: true
     });
   }
@@ -45,8 +49,10 @@ export class DataService {
   }
 
   getBasket(basketId: string): Observable<Basket> {
-    return this.http.get<Basket>(`${environment.baseApiUrl}/basket/${basketId}`, {})
-      .pipe(map(data => {
+    return this.http
+      .get<Basket>(`${environment.baseApiUrl}/basket/${basketId}`, {})
+      .pipe(
+        map(data => {
           let retour: Basket = {
             id: data.id,
             products: new Map()

@@ -18,7 +18,6 @@ export class UserService {
     if (this.shouldListen) {
       this.shouldListen = false;
       this.store$.select(UserSelectors.selectIsLogged).subscribe(logged => {
-        console.log(localStorage.getItem("isLogged") == "true");
         if (logged) {
           localStorage.setItem("isLogged", "true");
           this.load();
@@ -41,6 +40,10 @@ export class UserService {
         password: password
       })
     );
+  }
+
+  logout() {
+    this.store$.dispatch(new UserAction.LogoutRequestAction());
   }
 
   isLogged(): Observable<boolean> {

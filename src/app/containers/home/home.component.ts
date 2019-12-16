@@ -30,6 +30,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  logout() {
+    this.userService.logout();
+  }
+
   scroll(el: HTMLElement) {
     el.scrollIntoView({ behavior: "smooth" });
   }
