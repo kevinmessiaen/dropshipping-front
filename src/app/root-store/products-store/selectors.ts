@@ -6,6 +6,7 @@ import {
 
 import { productsAdapter, State } from "./state";
 import { Product } from "src/app/models/Product";
+import { Basket } from "src/app/models/Basket";
 
 export const getError = (state: State): any => state.error;
 
@@ -24,6 +25,15 @@ export const selectAllProductsByCategoryId = (id: number) =>
   createSelector(selectAllProducts, (selectAllProducts: Product[]) => {
     if (selectAllProducts) {
       return selectAllProducts.filter(p => p.categoryId === id);
+    } else {
+      return null;
+    }
+  });
+
+export const selectAllProductsInBasket = (basket: Basket) =>
+  createSelector(selectAllProducts, (selectAllProducts: Product[]) => {
+    if (selectAllProducts) {
+      return selectAllProducts.filter(p => basket.products.has(p.id));
     } else {
       return null;
     }

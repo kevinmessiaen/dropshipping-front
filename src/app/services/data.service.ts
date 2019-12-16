@@ -7,6 +7,7 @@ import { Product } from "../models/Product";
 import { Basket, BasketDto } from "../models/Basket";
 import { map } from "rxjs/operators";
 import { User } from "../models/User";
+import { isDefined } from "@angular/compiler/src/util";
 
 @Injectable({
   providedIn: "root"
@@ -19,21 +20,15 @@ export class DataService {
     formData.append("username", username);
     formData.append("password", password);
 
-    return this.http.post(`${environment.baseApiUrl}/login`, formData, {
-      withCredentials: true
-    });
+    return this.http.post(`${environment.baseApiUrl}/login`, formData);
   }
 
   logout(): Observable<any> {
-    return this.http.get(`${environment.baseApiUrl}/logout`, {
-      withCredentials: true
-    });
+    return this.http.get(`${environment.baseApiUrl}/logout`);
   }
 
   getUser(): Observable<User> {
-    return this.http.get<User>(`${environment.baseApiUrl}/restricted/user`, {
-      withCredentials: true
-    });
+    return this.http.get<User>(`${environment.baseApiUrl}/restricted/user`);
   }
 
   getCategories(): Observable<Category[]> {
@@ -57,10 +52,11 @@ export class DataService {
             id: data.id,
             products: new Map()
           };
-
-          Object.entries(data.products).forEach(k => {
-            retour.products.set(parseInt(k[0]), k[1]);
-          });
+          if (isDefined(data.products)) {
+            Object.entries(data.products).forEach(k => {
+              retour.products.set(parseInt(k[0]), k[1]);
+            });
+          }
           return retour;
         })
       );

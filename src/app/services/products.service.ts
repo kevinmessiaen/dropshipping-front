@@ -7,6 +7,7 @@ import {
   ProductsSelectors
 } from "../root-store/products-store";
 import { Product } from "../models/Product";
+import { Basket } from "../models/Basket";
 
 @Injectable({
   providedIn: "root"
@@ -30,6 +31,12 @@ export class ProductsService {
   findByCategoryId(categoryId: number): Observable<Product[]> {
     return this.store$.select(
       ProductsSelectors.selectAllProductsByCategoryId(categoryId)
+    );
+  }
+
+  findInBasket(basket: Basket): Observable<Product[]> {
+    return this.store$.select(
+      ProductsSelectors.selectAllProductsInBasket(basket)
     );
   }
 
