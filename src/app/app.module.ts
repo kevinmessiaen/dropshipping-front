@@ -18,6 +18,8 @@ import { BasketComponent } from './containers/basket/basket.component';
 import { HomeComponent } from './containers/home/home.component';
 import { LoginComponent } from './containers/login/login.component';
 import { InscriptionComponent } from './containers/inscription/inscription.component';
+import { StoreComponent } from './containers/store/store.component';
+import { PageNotFoundComponent } from './containers/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { InscriptionComponent } from './containers/inscription/inscription.compo
     BasketComponent,
     HomeComponent,
     LoginComponent,
-    InscriptionComponent
+    InscriptionComponent,
+    StoreComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
