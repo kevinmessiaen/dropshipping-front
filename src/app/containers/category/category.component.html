@@ -14,39 +14,45 @@
 
     <div *ngIf="!(error$ | async)" class="row">
       <div class="col-lg-3">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <ng-container
-              *ngFor="let category of categoryPath$ | async; let last = last"
-            >
-              <li *ngIf="!last" class="breadcrumb-item">
-                <a [routerLink]="['/categorie', category.path]">{{
-                  category.name
-                }}</a>
-              </li>
-              <li
-                *ngIf="last"
-                class="breadcrumb-item active"
-                aria-current="page"
+        <div class="sticky-top">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <ng-container
+                *ngFor="let category of categoryPath$ | async; let last = last"
               >
-                {{ category.name }}
-              </li>
-            </ng-container>
-          </ol>
-        </nav>
+                <li *ngIf="!last" class="breadcrumb-item">
+                  <a [routerLink]="['/categorie', category.path]">{{
+                    category.name
+                  }}</a>
+                </li>
+                <li
+                  *ngIf="last"
+                  class="breadcrumb-item active"
+                  aria-current="page"
+                >
+                  {{ category.name }}
+                </li>
+              </ng-container>
+            </ol>
+          </nav>
 
-        <div class="input-group">
-          <input
-            class="form-control"
-            [(ngModel)]="recherche"
-            (keyup.enter)="onSearch()"
-            type="text"
-            placeholder="Rechercher"
-          />
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button" (click)="onSearch()">
-              <fa-icon [icon]="['fas', 'search']"></fa-icon>
-            </button>
+          <div class="input-group">
+            <input
+              class="form-control"
+              [(ngModel)]="recherche"
+              (keyup.enter)="onSearch()"
+              type="text"
+              placeholder="Rechercher"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-primary"
+                type="button"
+                (click)="onSearch()"
+              >
+                <fa-icon [icon]="['fas', 'search']"></fa-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>
