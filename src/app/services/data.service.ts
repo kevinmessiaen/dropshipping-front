@@ -62,7 +62,7 @@ export class DataService {
       );
   }
 
-  updateBasket(basket: Basket): Observable<Basket> {
+  updateBasket(basket: Basket, fuse: boolean): Observable<Basket> {
     let products = {};
     if (basket.products) {
       basket.products.forEach((v, k) => (products[k] = v));
@@ -72,7 +72,12 @@ export class DataService {
       products: products
     };
     return this.http
-      .put<BasketDto>(`${environment.baseApiUrl}/basket/${basket.id}`, data)
+      .put<BasketDto>(
+        `${environment.baseApiUrl}${fuse ? "/restricted/" : "/"}basket/${
+          basket.id
+        }`,
+        data
+      )
       .pipe(
         map(data => {
           let retour: Basket = {

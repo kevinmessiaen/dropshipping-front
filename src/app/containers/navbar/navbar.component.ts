@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Observable, Subscription } from "rxjs";
 import { Category } from "src/app/models/Category";
 import {
   faStar as fasStar,
@@ -15,10 +15,11 @@ import { BasketService } from "src/app/services/basket.service";
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"]
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   leafCategories$: Observable<Category[]>;
   recherche: string = "";
   cartCount: number = 0;
+  subscription: Subscription;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -31,7 +32,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.leafCategories$ = this.categoriesService.findLeafCategories();
 
-    this.basketService.getUpdates().subscribe(b => {
+    this.subscription = this.basketService.getUpdates().subscribe(b => {
       console.log(b);
       let c: number = 0;
       b.products.forEach((v, k) => {
@@ -42,5 +43,9 @@ export class NavbarComponent implements OnInit {
 
     this.categoriesService.load();
     this.basketService.create();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

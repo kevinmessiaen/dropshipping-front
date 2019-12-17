@@ -56,17 +56,19 @@ export class BasketEffects {
       featureActions.ActionTypes.UPDATE_REQUEST
     ),
     switchMap(action =>
-      this.dataService.updateBasket(action.payload.basket).pipe(
-        map(
-          basket =>
-            new featureActions.UpdateSuccessAction({
-              basket
-            })
-        ),
-        catchError(error =>
-          observableOf(new featureActions.UpdateFailureAction({ error }))
+      this.dataService
+        .updateBasket(action.payload.basket, action.payload.fuse)
+        .pipe(
+          map(
+            basket =>
+              new featureActions.UpdateSuccessAction({
+                basket
+              })
+          ),
+          catchError(error =>
+            observableOf(new featureActions.UpdateFailureAction({ error }))
+          )
         )
-      )
     )
   );
 }

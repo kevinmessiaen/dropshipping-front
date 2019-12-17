@@ -44,7 +44,7 @@ export class CreateSuccessAction implements Action {
 
 export class UpdateRequestAction implements Action {
   readonly type = ActionTypes.UPDATE_REQUEST;
-  constructor(public payload: { basket: Basket }) {}
+  constructor(public payload: { basket: Basket; fuse: boolean }) {}
 }
 
 export class UpdateFailureAction implements Action {
