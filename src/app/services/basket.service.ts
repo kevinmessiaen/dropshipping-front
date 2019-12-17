@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { RootStoreState } from "../root-store";
 import { BasketAction, BasketSelectors } from "../root-store/basket-store";
 import { Basket } from "../models/Basket";
-import { debounceTime, take } from "rxjs/operators";
+import { debounceTime, take, first } from "rxjs/operators";
 import { isDefined } from "@angular/compiler/src/util";
 import { Subscription } from "rxjs";
 
@@ -45,7 +45,7 @@ export class BasketService {
       }
       this.store$
         .select(BasketSelectors.selectBasket)
-        .pipe()
+        .pipe(first(b => isDefined(b)))
         .subscribe((b: Basket) => {
           if (b != null && this.products == null) {
             if (!b.products) {
@@ -68,9 +68,14 @@ export class BasketService {
         this.store$.dispatch(new BasketAction.CreateRequestAction());
       }
     } else if (this.basket) {
-      console.log("emit");
       this.basket$.emit(this.basket);
     }
+  }
+
+  recreate() {
+    localStorage.removeItem("basketId");
+    this.shouldCreateOrLoad = true;
+    this.create();
   }
 
   async addToBasket(productId: number) {

@@ -4,6 +4,7 @@ import { RootStoreState } from "../root-store";
 import { UserAction, UserSelectors } from "../root-store/user-store";
 import { Observable } from "rxjs";
 import { User } from "../models/User";
+import { BasketService } from "./basket.service";
 
 @Injectable({
   providedIn: "root"
@@ -11,8 +12,12 @@ import { User } from "../models/User";
 export class UserService {
   private shouldListen: boolean = true;
   private shouldLoad: boolean = true;
+  private logoutRequested: boolean = false;
 
-  constructor(private store$: Store<RootStoreState.State>) {}
+  constructor(
+    private store$: Store<RootStoreState.State>,
+    private basketService: BasketService
+  ) {}
 
   load() {
     if (this.shouldListen) {
@@ -22,8 +27,13 @@ export class UserService {
           localStorage.setItem("isLogged", "true");
           this.load();
         } else {
-          localStorage.clear();
-          this.shouldLoad = true;
+          localStorage.removeItem("isLogged");
+          if (this.logoutRequested) {
+            this.logoutRequested = false;
+            localStorage.clear();
+            this.basketService.recreate();
+            this.shouldLoad = true;
+          }
         }
       });
     }
@@ -43,6 +53,7 @@ export class UserService {
   }
 
   logout() {
+    this.logoutRequested = true;
     this.store$.dispatch(new UserAction.LogoutRequestAction());
   }
 
