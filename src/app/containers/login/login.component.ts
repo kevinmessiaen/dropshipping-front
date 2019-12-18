@@ -51,9 +51,6 @@ export class LoginComponent implements OnInit {
         }
       });
     }
-    console.log(
-      this.validate && !(isDefined(this.password) && this.password.length > 0)
-    );
   }
 
   register() {

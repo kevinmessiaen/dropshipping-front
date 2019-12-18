@@ -1,26 +1,41 @@
-import { EventEmitter, Injectable } from "@angular/core";
-import { isDefined } from "@angular/compiler/src/util";
-import { DataService } from "./data.service";
-import { Basket } from "../models/Basket";
+import {EventEmitter, Injectable} from "@angular/core";
+import {isDefined} from "@angular/compiler/src/util";
+import {DataService} from "./data.service";
+import {Basket} from "../models/Basket";
+import {BehaviorSubject} from "rxjs";
+import {debounceTime} from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class BasketService {
+  private updateRequests$: EventEmitter<Basket> = new EventEmitter<Basket>();
   private _basketId: string;
 
   private _basket: Basket;
-  basket$: EventEmitter<Basket> = new EventEmitter();
+  basket$: BehaviorSubject<Basket> = new BehaviorSubject<Basket>({
+    id: "",
+    products: new Map<number, number>(),
+    items: 0,
+    price: 0
+  });
 
   constructor(private dataService: DataService) {
     this.basketId = localStorage.getItem("basketId");
     if (!isDefined(this.basketId)) this.createBasket();
+
+    this.updateRequests$.pipe(debounceTime(500))
+      .subscribe((b) =>
+        dataService.updateBasket(b).subscribe((updated) => this.basket = updated)
+      );
   }
 
   set basketId(basketId: string) {
     if (this._basketId === basketId) return;
+    this._basketId = basketId;
 
-    if (isDefined(basketId)) {
+    console.log(basketId);
+    if (isDefined(this._basketId)) {
       this.getBasket();
     } else {
       this.createBasket();
@@ -29,8 +44,10 @@ export class BasketService {
 
   set basket(basket: Basket) {
     if (this._basket === basket) return;
-    this.basket$.emit(this._basket);
+    this._basket = basket;
+    this.basket$.next(this._basket);
 
+    console.log(this._basket);
     if (isDefined(this._basket)) {
       localStorage.setItem("basketId", this._basket.id);
       this.basketId = this._basket.id;
@@ -54,9 +71,13 @@ export class BasketService {
   }
 
   addToBasket(product: number) {
-    this.basket$.subscribe(b => {
-      console.log(b);
-      this.basket$.emit(b);
-    });
+    if (isDefined(this._basket)) {
+      if (!isDefined(this._basket.products))
+        this._basket.products = new Map<number, number>();
+      if (this._basket.products.has(product))
+        this._basket.products.set(product, this._basket.products.get(product) + 1);
+      else this._basket.products.set(product, 1);
+      this.updateRequests$.emit(this._basket);
+    }
   }
 }

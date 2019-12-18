@@ -1,3 +1,5 @@
+import {isDefined} from "@angular/compiler/src/util";
+
 export class Basket {
   id: string;
   products: Map<number, number>;
@@ -14,9 +16,12 @@ export class BasketDto {
 
 export function parseBasket(dto: BasketDto): Basket {
   let map: Map<number, number> = new Map();
-  Object.entries(dto.products).forEach(k => {
-    map.set(parseInt(k[0]), k[1]);
-  });
+
+  if (isDefined(dto.products)) {
+    Object.entries(dto.products).forEach(k => {
+      map.set(parseInt(k[0]), k[1]);
+    });
+  }
 
   return {
     id: dto.id,
@@ -28,7 +33,7 @@ export function parseBasket(dto: BasketDto): Basket {
 
 export function mapBasket(basket: Basket): BasketDto {
   let products = {};
-  if (basket.products) {
+  if (isDefined(basket.products)) {
     basket.products.forEach((v, k) => (products[k] = v));
   }
   return {

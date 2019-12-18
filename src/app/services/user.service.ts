@@ -3,7 +3,7 @@ import { BasketService } from "./basket.service";
 import { User } from "../models/User";
 import { DataService } from "./data.service";
 import { isDefined } from "@angular/compiler/src/util";
-import { Observable, of } from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import { map, catchError } from "rxjs/operators";
 
 @Injectable({
@@ -11,10 +11,10 @@ import { map, catchError } from "rxjs/operators";
 })
 export class UserService {
   private _isLogged: boolean;
-  isLogged$: EventEmitter<boolean> = new EventEmitter();
+  isLogged$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private _user: User;
-  user$: EventEmitter<User> = new EventEmitter();
+  user$: BehaviorSubject<User> = new BehaviorSubject(null);
 
   constructor(
     private dataService: DataService,
@@ -25,10 +25,11 @@ export class UserService {
 
   set isLogged(isLogged: boolean) {
     if (this._isLogged === isLogged) return;
-    this.isLogged$.emit(this._isLogged);
+    this._isLogged = isLogged;
+    this.isLogged$.next(this._isLogged);
 
     if (this._isLogged) {
-      localStorage.setItem("isLogged", "user");
+      localStorage.setItem("isLogged", "true");
       this.getUser();
     } else {
       localStorage.clear();
@@ -38,10 +39,11 @@ export class UserService {
 
   set user(user: User) {
     if (user === this._user) return;
-    this.user$.emit(this._user);
+    this._user = user;
+    this.user$.next(this._user);
 
-    if (isDefined(this.user)) {
-      this.basketService.basketId = this.user.basketId;
+    if (isDefined(this._user)) {
+      this.basketService.basketId = this._user.basketId;
     } else {
       this.basketService.basketId = null;
     }
@@ -50,11 +52,11 @@ export class UserService {
   login(username: string, password: string): Observable<boolean> {
     return this.dataService.login(username, password).pipe(
       map(() => {
-        this._isLogged = true;
+        this.isLogged = true;
         return true;
       }),
       catchError(e => {
-        this._isLogged = false;
+        this.isLogged = false;
         return of(false);
       })
     );
@@ -67,7 +69,7 @@ export class UserService {
   getUser() {
     this.dataService.getUser().subscribe(
       user => (this.user = user),
-      error => (this.user = null)
+      error => (this.isLogged = false)
     );
   }
 }

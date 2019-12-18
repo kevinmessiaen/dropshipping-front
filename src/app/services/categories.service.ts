@@ -1,14 +1,8 @@
-import { Injectable, EventEmitter } from "@angular/core";
-import { DataService } from "./data.service";
-import {
-  Category,
-  CategoryTree,
-  buildTree,
-  findPath,
-  findDeepChildren
-} from "../models/Category";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import {Injectable} from "@angular/core";
+import {DataService} from "./data.service";
+import {buildTree, Category, CategoryTree, findDeepChildren, findPath} from "../models/Category";
+import {BehaviorSubject, Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -16,8 +10,8 @@ import { map } from "rxjs/operators";
 export class CategoriesService {
   private _categories: Category[];
   private _categoryTree: CategoryTree[];
-  categories$: EventEmitter<Category[]> = new EventEmitter();
-  categoryTree$: EventEmitter<CategoryTree[]> = new EventEmitter();
+  categories$: BehaviorSubject<Category[]> = new BehaviorSubject<Category[]>([]);
+  categoryTree$: BehaviorSubject<CategoryTree[]> = new BehaviorSubject<CategoryTree[]>([]);
 
   constructor(private dataService: DataService) {
     this.dataService.getCategories().subscribe(c => (this.categories = c));
@@ -25,13 +19,13 @@ export class CategoriesService {
 
   set categories(categories: Category[]) {
     this._categories = categories;
-    this.categories$.emit(this._categories);
+    this.categories$.next(this._categories);
     this.categoryTree = buildTree(this._categories);
   }
 
   set categoryTree(categoryTree: CategoryTree[]) {
     this._categoryTree = categoryTree;
-    this.categoryTree$.emit(this._categoryTree);
+    this.categoryTree$.next(this._categoryTree);
   }
 
   findByPath(path: string): Observable<Category[]> {

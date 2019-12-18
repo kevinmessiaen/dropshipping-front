@@ -12,6 +12,7 @@ import { BasketService } from "src/app/services/basket.service";
 import { map } from "rxjs/operators";
 import { isDefined } from "@angular/compiler/src/util";
 import { Basket } from "src/app/models/Basket";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: "app-navbar",
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private categoriesService: CategoriesService,
     private basketService: BasketService,
+    private userService: UserService,
     library: FaIconLibrary
   ) {
     library.addIcons(fasStar, fasShoppingCart, fasSearch);
