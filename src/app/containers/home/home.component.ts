@@ -19,9 +19,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    this.isLogged$ = this.userService.isLogged();
-    this.user$ = this.userService.user();
-    this.userService.load();
+    this.isLogged$ = this.userService.isLogged$;
+    this.user$ = this.userService.user$;
   }
 
   ngAfterViewInit(): void {

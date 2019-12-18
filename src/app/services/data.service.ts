@@ -4,10 +4,9 @@ import { environment } from "src/environments/environment";
 import { Category } from "../models/Category";
 import { Observable } from "rxjs";
 import { Product } from "../models/Product";
-import { Basket, BasketDto } from "../models/Basket";
+import { Basket, BasketDto, mapBasket, parseBasket } from "../models/Basket";
 import { map } from "rxjs/operators";
 import { User } from "../models/User";
-import { isDefined } from "@angular/compiler/src/util";
 
 @Injectable({
   providedIn: "root"
@@ -40,56 +39,23 @@ export class DataService {
   }
 
   createBasket(): Observable<Basket> {
-    return this.http.post<Basket>(`${environment.baseApiUrl}/basket`, {});
+    return this.http
+      .post<Basket>(`${environment.baseApiUrl}/basket`, {})
+      .pipe(map(data => parseBasket(data)));
   }
 
   getBasket(basketId: string): Observable<Basket> {
     return this.http
-      .get<Basket>(`${environment.baseApiUrl}/basket/${basketId}`, {})
-      .pipe(
-        map(data => {
-          let retour: Basket = {
-            id: data.id,
-            products: new Map()
-          };
-          if (isDefined(data.products)) {
-            Object.entries(data.products).forEach(k => {
-              retour.products.set(parseInt(k[0]), k[1]);
-            });
-          }
-          return retour;
-        })
-      );
+      .get<Basket>(`${environment.baseApiUrl}/basket/${basketId}`)
+      .pipe(map(data => parseBasket(data)));
   }
 
-  updateBasket(basket: Basket, fuse: boolean): Observable<Basket> {
-    let products = {};
-    if (basket.products) {
-      basket.products.forEach((v, k) => (products[k] = v));
-    }
-    let data = {
-      id: basket.id,
-      products: products
-    };
+  updateBasket(basket: Basket): Observable<Basket> {
     return this.http
       .put<BasketDto>(
-        `${environment.baseApiUrl}${fuse ? "/restricted/" : "/"}basket/${
-          basket.id
-        }`,
-        data
+        `${environment.baseApiUrl}/basket/${basket.id}`,
+        mapBasket(basket)
       )
-      .pipe(
-        map(data => {
-          let retour: Basket = {
-            id: data.id,
-            products: new Map()
-          };
-
-          Object.entries(data.products).forEach(k => {
-            retour.products.set(parseInt(k[0]), k[1]);
-          });
-          return retour;
-        })
-      );
+      .pipe(map(data => parseBasket(data)));
   }
 }

@@ -15,9 +15,8 @@ import { isDefined } from "@angular/compiler/src/util";
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  error$: Observable<String>;
-  subcribtion: Subscription;
+export class LoginComponent implements OnInit {
+  error: boolean = false;
 
   validate: boolean = false;
   username: string;
@@ -31,18 +30,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService, private router: Router) {}
 
-  ngOnInit() {
-    this.error$ = this.userService.error();
-    this.subcribtion = this.userService.isLogged().subscribe(logged => {
-      if (logged) {
-        this.closeModal.nativeElement.click();
-        this.router.navigate(["/store"]);
-      }
-    });
-    this.userService.load();
-  }
+  ngOnInit() {}
 
   login() {
+    this.error = false;
     this.validate = true;
     if (
       isDefined(this.username) &&
@@ -51,7 +42,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       isDefined(this.password) &&
       this.password.length > 0
     ) {
-      this.userService.login(this.username, this.password);
+      this.userService.login(this.username, this.password).subscribe(loged => {
+        if (loged) {
+          this.closeModal.nativeElement.click();
+          this.router.navigate(["/store"]);
+        } else {
+          this.error = true;
+        }
+      });
     }
     console.log(
       this.validate && !(isDefined(this.password) && this.password.length > 0)
@@ -61,9 +59,5 @@ export class LoginComponent implements OnInit, OnDestroy {
   register() {
     this.closeModal.nativeElement.click();
     this.openRegisterModal.nativeElement.click();
-  }
-
-  ngOnDestroy() {
-    this.subcribtion.unsubscribe();
   }
 }

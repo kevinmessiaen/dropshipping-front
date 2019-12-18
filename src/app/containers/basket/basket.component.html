@@ -13,17 +13,20 @@
     </div>
 
     <div *ngIf="!(error$ | async)">
-      <div *ngIf="!basket || basket.size === 0" class="text-center">
+      <div
+        *ngIf="!(basket$ | async).items || (basket$ | async)?.items === 0"
+        class="text-center"
+      >
         Votre panier est vide!
       </div>
-      <div *ngIf="basket?.size > 0" class="row">
+      <div *ngIf="(basket$ | async)?.items > 0" class="row">
         <div class="col-lg-8">
           <div class="d-flex">
             <h4 class="text-uppercase flex-grow-1">Mon panier</h4>
             <span class="align-self-end">Prix</span>
           </div>
           <div class="dropdown-divider"></div>
-          <div *ngFor="let product of basket | keyvalue">
+          <div *ngFor="let product of (basket$ | async)?.products | keyvalue">
             <div class="row">
               <div class="col-4">
                 <img
@@ -51,7 +54,7 @@
           <div class="dropdown-divider"></div>
           <div class="d-flex">
             <span class="flex-grow-1"><strong>Sous-total</strong></span>
-            <span class="align-self-end">{{ basketValue }}€</span>
+            <span class="align-self-end">{{ (basket$ | async)?.price }}€</span>
           </div>
         </div>
       </div>

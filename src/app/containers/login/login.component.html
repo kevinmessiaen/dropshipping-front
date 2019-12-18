@@ -67,7 +67,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="error$ | async" class="alert alert-danger" role="alert">
+        <div *ngIf="error" class="alert alert-danger" role="alert">
           Nom d'utilisateur ou mot de passe incorrect!
         </div>
         <div class="row">
@@ -76,7 +76,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="register()">S'inscrire</button>
+        <button type="button" class="btn btn-secondary" (click)="register()">
+          S'inscrire
+        </button>
         <button type="button" class="btn btn-primary" (click)="login()">
           Se connecter
         </button>
@@ -91,5 +93,4 @@
   data-toggle="modal"
   data-target="#registerModal"
   #openRegisterModal
->
-</button>
+></button>

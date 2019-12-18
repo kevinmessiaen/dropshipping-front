@@ -1,74 +1,73 @@
-import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { RootStoreState } from "../root-store";
-import { UserAction, UserSelectors } from "../root-store/user-store";
-import { Observable } from "rxjs";
-import { User } from "../models/User";
+import { Injectable, EventEmitter } from "@angular/core";
 import { BasketService } from "./basket.service";
+import { User } from "../models/User";
+import { DataService } from "./data.service";
+import { isDefined } from "@angular/compiler/src/util";
+import { Observable, of } from "rxjs";
+import { map, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
-  private shouldLoad: boolean = true;
-  private logoutRequested: boolean = false;
-  private loginRequested: boolean = false;
+  private _isLogged: boolean;
+  isLogged$: EventEmitter<boolean> = new EventEmitter();
+
+  private _user: User;
+  user$: EventEmitter<User> = new EventEmitter();
 
   constructor(
-    private store$: Store<RootStoreState.State>,
+    private dataService: DataService,
     private basketService: BasketService
   ) {
-    this.store$.select(UserSelectors.selectIsLogged).subscribe(logged => {
-      if (logged) {
-        localStorage.setItem("isLogged", "true");
-        this.load();
-        if (this.loginRequested) {
-          this.logoutRequested = false;
-          basketService.fuse();
-        }
-      } else {
-        localStorage.removeItem("isLogged");
-        if (this.logoutRequested) {
-          this.logoutRequested = false;
-          localStorage.clear();
-          this.basketService.recreate();
-          this.shouldLoad = true;
-        }
-      }
-    });
+    this.isLogged = localStorage.getItem("isLogged") == "true";
   }
 
-  load() {
-    if (this.shouldLoad && localStorage.getItem("isLogged") == "true") {
-      this.shouldLoad = false;
-      this.store$.dispatch(new UserAction.LoadRequestAction());
+  set isLogged(isLogged: boolean) {
+    if (this._isLogged === isLogged) return;
+    this.isLogged$.emit(this._isLogged);
+
+    if (this._isLogged) {
+      localStorage.setItem("isLogged", "user");
+      this.getUser();
+    } else {
+      localStorage.clear();
+      this.user = null;
     }
   }
 
-  login(username: string, password: string) {
-    this.loginRequested = true;
-    this.store$.dispatch(
-      new UserAction.LoginRequestAction({
-        username: username,
-        password: password
+  set user(user: User) {
+    if (user === this._user) return;
+    this.user$.emit(this._user);
+
+    if (isDefined(this.user)) {
+      this.basketService.basketId = this.user.basketId;
+    } else {
+      this.basketService.basketId = null;
+    }
+  }
+
+  login(username: string, password: string): Observable<boolean> {
+    return this.dataService.login(username, password).pipe(
+      map(() => {
+        this._isLogged = true;
+        return true;
+      }),
+      catchError(e => {
+        this._isLogged = false;
+        return of(false);
       })
     );
   }
 
   logout() {
-    this.logoutRequested = true;
-    this.store$.dispatch(new UserAction.LogoutRequestAction());
+    this.dataService.logout().subscribe(() => (this.isLogged = false));
   }
 
-  isLogged(): Observable<boolean> {
-    return this.store$.select(UserSelectors.selectIsLogged);
-  }
-
-  error(): Observable<string> {
-    return this.store$.select(UserSelectors.selectUserError);
-  }
-
-  user(): Observable<User> {
-    return this.store$.select(UserSelectors.selectUser);
+  getUser() {
+    this.dataService.getUser().subscribe(
+      user => (this.user = user),
+      error => (this.user = null)
+    );
   }
 }

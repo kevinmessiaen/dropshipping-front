@@ -18,7 +18,9 @@
     <div class="navbar-nav d-lg-none">
       <a [routerLink]="['/basket']" class="nav-item nav-link">
         Panier
-        <span class="badge badge-pill badge-secondary">{{ cartCount }}</span>
+        <span class="badge badge-pill badge-secondary">{{
+          (basket$ | async)?.items
+        }}</span>
       </a>
       <div class="dropdown-divider"></div>
       <ng-container
@@ -70,7 +72,7 @@
         class="text-secondary h4"
       ></fa-icon>
       <span class="badge badge-pill badge-secondary pull-right badge-top-right">
-        {{ cartCount }}</span
+        {{ (basket$ | async)?.items }}</span
       >
     </a>
   </div>

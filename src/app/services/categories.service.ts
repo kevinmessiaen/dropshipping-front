@@ -1,49 +1,48 @@
-import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { Injectable, EventEmitter } from "@angular/core";
+import { DataService } from "./data.service";
 import {
-  RootStoreState,
-  CategoriesAction,
-  CategoriesSelectors
-} from "../root-store";
+  Category,
+  CategoryTree,
+  buildTree,
+  findPath,
+  findDeepChildren
+} from "../models/Category";
 import { Observable } from "rxjs";
-import { Category } from "../models/Category";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class CategoriesService {
-  private shouldLoad: boolean = true;
+  private _categories: Category[];
+  private _categoryTree: CategoryTree[];
+  categories$: EventEmitter<Category[]> = new EventEmitter();
+  categoryTree$: EventEmitter<CategoryTree[]> = new EventEmitter();
 
-  constructor(private store$: Store<RootStoreState.State>) {}
-
-  load() {
-    if (this.shouldLoad) {
-      this.shouldLoad = false;
-      this.store$.dispatch(new CategoriesAction.LoadRequestAction());
-    }
+  constructor(private dataService: DataService) {
+    this.dataService.getCategories().subscribe(c => (this.categories = c));
   }
 
-  findAll(): Observable<Category[]> {
-    return this.store$.select(CategoriesSelectors.selectAllCategories);
+  set categories(categories: Category[]) {
+    this._categories = categories;
+    this.categories$.emit(this._categories);
+    this.categoryTree = buildTree(this._categories);
+  }
+
+  set categoryTree(categoryTree: CategoryTree[]) {
+    this._categoryTree = categoryTree;
+    this.categoryTree$.emit(this._categoryTree);
   }
 
   findByPath(path: string): Observable<Category[]> {
-    return this.store$.select(CategoriesSelectors.selectCategoryByPath(path));
+    return this.categoryTree$.pipe(map(tree => findPath(path, tree)));
   }
 
-  findLeafCategories(): Observable<Category[]> {
-    return this.store$.select(CategoriesSelectors.selectLeafCategories());
-  }
-
-  findChildrenIds(id: number): Observable<number[]> {
-    return this.store$.select(CategoriesSelectors.selectAllChildrenIds(id));
-  }
-
-  error(): Observable<boolean> {
-    return this.store$.select(CategoriesSelectors.selectCategoriesIsLoading);
-  }
-
-  isLoading(): Observable<any> {
-    return this.store$.select(CategoriesSelectors.selectCategoriesError);
+  findDeepChildren(id: number): Observable<number[]> {
+    return this.categoryTree$.pipe(
+      map(tree => {
+        return findDeepChildren(id, tree);
+      })
+    );
   }
 }

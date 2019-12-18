@@ -4,8 +4,6 @@ import { FormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { RootStoreModule } from "./root-store/root-store.module";
-import { CategoriesComponent } from "./containers/categories/categories.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -25,7 +23,6 @@ import { BasicAuthInterceptor } from "./basic-auth.interceptor";
 @NgModule({
   declarations: [
     AppComponent,
-    CategoriesComponent,
     NavbarComponent,
     CategoryComponent,
     ProductsComponent,
@@ -42,7 +39,6 @@ import { BasicAuthInterceptor } from "./basic-auth.interceptor";
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
-    RootStoreModule,
     BrowserAnimationsModule
   ],
   providers: [

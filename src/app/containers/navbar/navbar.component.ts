@@ -9,43 +9,36 @@ import {
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { CategoriesService } from "src/app/services/categories.service";
 import { BasketService } from "src/app/services/basket.service";
+import { map } from "rxjs/operators";
+import { isDefined } from "@angular/compiler/src/util";
+import { Basket } from "src/app/models/Basket";
 
 @Component({
   selector: "app-navbar",
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"]
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit {
   leafCategories$: Observable<Category[]>;
-  recherche: string = "";
-  cartCount: number = 0;
-  subscription: Subscription;
+  basket$: Observable<Basket>;
 
   constructor(
     private categoriesService: CategoriesService,
     private basketService: BasketService,
-    private library: FaIconLibrary
+    library: FaIconLibrary
   ) {
     library.addIcons(fasStar, fasShoppingCart, fasSearch);
   }
 
   ngOnInit() {
-    this.leafCategories$ = this.categoriesService.findLeafCategories();
+    this.leafCategories$ = this.categoriesService.categories$.pipe(
+      map(categories =>
+        categories.filter(
+          c => !isDefined(c.children) || c.children.length === 0
+        )
+      )
+    );
 
-    this.subscription = this.basketService.getUpdates().subscribe(b => {
-      console.log(b);
-      let c: number = 0;
-      b.products.forEach((v, k) => {
-        c += v;
-      });
-      this.cartCount = c;
-    });
-
-    this.categoriesService.load();
-    this.basketService.create();
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.basket$ = this.basketService.basket$;
   }
 }

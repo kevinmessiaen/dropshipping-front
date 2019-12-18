@@ -11,8 +11,6 @@ import { CategoriesService } from "src/app/services/categories.service";
 })
 export class CategoryComponent implements OnInit {
   categoryPath$: Observable<Category[]>;
-  error$: Observable<any>;
-  isLoading$: Observable<boolean>;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,9 +22,5 @@ export class CategoryComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.categoryPath$ = this.categoriesService.findByPath(params.path);
     });
-
-    this.error$ = this.categoriesService.error();
-    this.isLoading$ = this.categoriesService.isLoading();
-    this.categoriesService.load();
   }
 }

@@ -1,17 +1,5 @@
 <div class="under-nav">
   <div class="container pt-4">
-    <div *ngIf="error$ | async" class="alert alert-primary" role="alert">
-      Impossible de charger les catégories
-    </div>
-
-    <div
-      *ngIf="isLoading$ | async"
-      class="spinner-border text-primary"
-      role="status"
-    >
-      <span class="sr-only">Loading...</span>
-    </div>
-
     <div *ngIf="!(error$ | async)" class="row">
       <div class="col-lg-3">
         <div class="sticky-top">

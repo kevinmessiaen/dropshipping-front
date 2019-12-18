@@ -1,56 +1,51 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Store } from "@ngrx/store";
-import { RootStoreState } from "../root-store";
-import {
-  ProductsAction,
-  ProductsSelectors
-} from "../root-store/products-store";
+import { Injectable, EventEmitter } from "@angular/core";
+import { CategoriesService } from "./categories.service";
 import { Product } from "../models/Product";
-import { Basket } from "../models/Basket";
+import { DataService } from "./data.service";
+import { BasketService } from "./basket.service";
+import { Observable, combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class ProductsService {
-  private shouldLoad: boolean = true;
+  private _products: Product[];
+  products$: EventEmitter<Product[]> = new EventEmitter();
 
-  constructor(private store$: Store<RootStoreState.State>) {}
-
-  load() {
-    if (this.shouldLoad) {
-      this.shouldLoad = false;
-      this.store$.dispatch(new ProductsAction.LoadRequestAction());
-    }
+  constructor(
+    dataService: DataService,
+    private categoriesService: CategoriesService,
+    private basketService: BasketService
+  ) {
+    dataService.getProducts().subscribe(p => (this.products = p));
   }
 
-  findAll(): Observable<Product[]> {
-    return this.store$.select(ProductsSelectors.selectAllProducts);
+  set products(products: Product[]) {
+    this._products = products;
+    this.products$.emit(this._products);
   }
 
-  findByCategoryId(categoryId: number): Observable<Product[]> {
-    return this.store$.select(
-      ProductsSelectors.selectAllProductsByCategoryId(categoryId)
+  getByCategoryId(id: number): Observable<Product[]> {
+    return combineLatest(
+      this.products$.pipe(),
+      this.categoriesService.findDeepChildren(id)
+    ).pipe(
+      map(([products, ids]) => {
+        console.log(ids);
+        return products.filter(p => ids.includes(p.categoryId));
+      })
     );
   }
 
-  findByCategoryIds(categoryIds: number[]): Observable<Product[]> {
-    return this.store$.select(
-      ProductsSelectors.selectAllProductsByCategoryIds(categoryIds)
+  getByUserBasket(): Observable<Product[]> {
+    return combineLatest(
+      this.products$.pipe(),
+      this.basketService.basket$.pipe()
+    ).pipe(
+      map(([products, basket]) =>
+        products.filter(p => basket.products.has(p.id))
+      )
     );
-  }
-
-  findInBasket(basket: Basket): Observable<Product[]> {
-    return this.store$.select(
-      ProductsSelectors.selectAllProductsInBasket(basket)
-    );
-  }
-
-  error(): Observable<boolean> {
-    return this.store$.select(ProductsSelectors.selectProductsIsLoading);
-  }
-
-  isLoading(): Observable<any> {
-    return this.store$.select(ProductsSelectors.selectProductsError);
   }
 }

@@ -1,107 +1,62 @@
 import { EventEmitter, Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { RootStoreState } from "../root-store";
-import { BasketAction, BasketSelectors } from "../root-store/basket-store";
-import { Basket } from "../models/Basket";
-import { debounceTime, take, first, filter } from "rxjs/operators";
 import { isDefined } from "@angular/compiler/src/util";
-import { Subscription } from "rxjs";
+import { DataService } from "./data.service";
+import { Basket } from "../models/Basket";
 
 @Injectable({
   providedIn: "root"
 })
 export class BasketService {
-  private shouldCreateOrLoad: boolean = true;
-  private updateRequested: boolean = false;
-  private basket$: EventEmitter<Basket> = new EventEmitter();
-  private basket: Basket;
+  private _basketId: string;
 
-  constructor(private store$: Store<RootStoreState.State>) {
-    this.store$
-      .select(BasketSelectors.selectBasket)
-      .pipe(filter(b => isDefined(b)))
-      .subscribe((b: Basket) => {
-        if (!b.products) {
-          b.products = new Map();
-        }
-        this.basket = b;
-        localStorage.setItem("basketId", this.basket.id);
+  private _basket: Basket;
+  basket$: EventEmitter<Basket> = new EventEmitter();
 
-        this.basket$.emit(b);
-      });
-
-    this.store$.select(BasketSelectors.selectBasketsError).subscribe(e => {
-      if (e) {
-        localStorage.removeItem("basketId");
-        this.shouldCreateOrLoad = true;
-        this.create();
-      }
-    });
-
-    this.basket$.pipe(debounceTime(500)).subscribe(b => {
-      if (this.updateRequested) {
-        this.updateRequested = false;
-        this.store$.dispatch(
-          new BasketAction.UpdateRequestAction({
-            basket: b,
-            fuse: false
-          })
-        );
-      }
-    });
+  constructor(private dataService: DataService) {
+    this.basketId = localStorage.getItem("basketId");
+    if (!isDefined(this.basketId)) this.createBasket();
   }
 
-  create() {
-    if (this.shouldCreateOrLoad) {
-      let basketId = localStorage.getItem("basketId");
-      this.shouldCreateOrLoad = false;
+  set basketId(basketId: string) {
+    if (this._basketId === basketId) return;
 
-      if (isDefined(basketId)) {
-        this.store$.dispatch(
-          new BasketAction.LoadRequestAction({
-            basketId
-          })
-        );
-      } else {
-        this.store$.dispatch(new BasketAction.CreateRequestAction());
-      }
-    } else if (isDefined(this.basket)) {
-      this.basket$.emit(this.basket);
+    if (isDefined(basketId)) {
+      this.getBasket();
+    } else {
+      this.createBasket();
     }
   }
 
-  recreate() {
-    localStorage.removeItem("basketId");
-    this.shouldCreateOrLoad = true;
-    this.create();
+  set basket(basket: Basket) {
+    if (this._basket === basket) return;
+    this.basket$.emit(this._basket);
+
+    if (isDefined(this._basket)) {
+      localStorage.setItem("basketId", this._basket.id);
+      this.basketId = this._basket.id;
+    } else {
+      localStorage.removeItem("basketId");
+    }
   }
 
-  fuse() {
-    this.store$.dispatch(
-      new BasketAction.UpdateRequestAction({
-        basket: this.basket,
-        fuse: true
-      })
+  createBasket() {
+    this.dataService.createBasket().subscribe(
+      basket => (this.basket = basket),
+      error => (this.basket = null)
     );
   }
 
-  async addToBasket(productId: number) {
-    let basket = this.basket
-      ? this.basket
-      : await this.basket$
-          .pipe(take(1))
-          .toPromise()
-          .then(b => b);
-    if (basket.products.has(productId)) {
-      basket.products.set(productId, basket.products.get(productId) + 1);
-    } else {
-      basket.products.set(productId, 1);
-    }
-    this.updateRequested = true;
-    this.basket$.emit(basket);
+  getBasket() {
+    this.dataService.getBasket(this._basketId).subscribe(
+      basket => (this.basket = basket),
+      error => (this.basket = null)
+    );
   }
 
-  getUpdates(): EventEmitter<Basket> {
-    return this.basket$;
+  addToBasket(product: number) {
+    this.basket$.subscribe(b => {
+      console.log(b);
+      this.basket$.emit(b);
+    });
   }
 }
