@@ -26,8 +26,8 @@ export function parseBasket(dto: BasketDto): Basket {
   return {
     id: dto.id,
     products: map,
-    items: dto.items | 0,
-    price: dto.price | 0
+    items: !isDefined(dto.items) ? 0 : dto.items,
+    price: !isDefined(dto.price) ? 0.0 : dto.price
   };
 }
 
