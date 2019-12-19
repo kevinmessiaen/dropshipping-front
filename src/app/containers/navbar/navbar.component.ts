@@ -12,7 +12,7 @@ import { BasketService } from "src/app/services/basket.service";
 import { map } from "rxjs/operators";
 import { isDefined } from "@angular/compiler/src/util";
 import { Basket } from "src/app/models/Basket";
-import {UserService} from "../../services/user.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: "app-navbar",

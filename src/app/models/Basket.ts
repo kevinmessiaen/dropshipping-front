@@ -1,4 +1,4 @@
-import {isDefined} from "@angular/compiler/src/util";
+import { isDefined } from "@angular/compiler/src/util";
 
 export class Basket {
   id: string;
@@ -26,8 +26,8 @@ export function parseBasket(dto: BasketDto): Basket {
   return {
     id: dto.id,
     products: map,
-    items: dto.items,
-    price: dto.price
+    items: dto.items | 0,
+    price: dto.price | 0
   };
 }
 

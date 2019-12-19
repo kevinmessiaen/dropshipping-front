@@ -14,7 +14,7 @@
 
     <div *ngIf="!(error$ | async)">
       <div
-        *ngIf="!(basket$ | async).items || (basket$ | async)?.items === 0"
+        *ngIf="!(basket$ | async)?.items || (basket$ | async)?.items === 0"
         class="text-center"
       >
         Votre panier est vide!

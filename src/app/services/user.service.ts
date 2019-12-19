@@ -3,14 +3,14 @@ import { BasketService } from "./basket.service";
 import { User } from "../models/User";
 import { DataService } from "./data.service";
 import { isDefined } from "@angular/compiler/src/util";
-import {BehaviorSubject, Observable, of} from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { map, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
-  private _isLogged: boolean;
+  private _isLogged: boolean = null;
   isLogged$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private _user: User;
@@ -25,13 +25,14 @@ export class UserService {
 
   set isLogged(isLogged: boolean) {
     if (this._isLogged === isLogged) return;
+    let first = !isDefined(this._isLogged);
     this._isLogged = isLogged;
     this.isLogged$.next(this._isLogged);
 
     if (this._isLogged) {
       localStorage.setItem("isLogged", "true");
       this.getUser();
-    } else {
+    } else if (!first) {
       localStorage.clear();
       this.user = null;
     }

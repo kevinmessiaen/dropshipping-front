@@ -7,7 +7,7 @@ import { Product } from "src/app/models/Product";
 import { ProductsService } from "src/app/services/products.service";
 
 import { isDefined } from "@angular/compiler/src/util";
-import { map } from "rxjs/operators";
+import { map, filter } from "rxjs/operators";
 
 @Component({
   selector: "app-basket",
@@ -15,8 +15,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./basket.component.scss"]
 })
 export class BasketComponent implements OnInit {
-  basket$: Observable<Basket>;
-  products$: Observable<Map<Product, number>>;
+  basket$: Observable<BasketWrapper>;
 
   constructor(
     private basketService: BasketService,
@@ -24,10 +23,9 @@ export class BasketComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.basket$ = this.basketService.basket$;
-    this.products$ = combineLatest(
+    this.basket$ = combineLatest(
       this.productsSerive.getByUserBasket(),
-      this.basketService.basket$.pipe()
+      this.basketService.basket$
     ).pipe(
       map(([products, basket]) => {
         let map: Map<Product, number> = new Map();
@@ -37,8 +35,21 @@ export class BasketComponent implements OnInit {
             v
           );
         });
-        return map;
+        map.delete(null);
+        map.delete(undefined);
+        console.log(map);
+        return {
+          products: map,
+          items: basket.items,
+          price: basket.price
+        };
       })
     );
   }
+}
+
+class BasketWrapper {
+  products: Map<Product, number>;
+  items: number;
+  price: number;
 }

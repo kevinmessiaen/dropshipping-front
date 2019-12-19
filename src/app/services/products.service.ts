@@ -1,10 +1,11 @@
-import {Injectable} from "@angular/core";
-import {CategoriesService} from "./categories.service";
-import {Product} from "../models/Product";
-import {DataService} from "./data.service";
-import {BasketService} from "./basket.service";
-import {BehaviorSubject, combineLatest, Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import { Injectable } from "@angular/core";
+import { CategoriesService } from "./categories.service";
+import { Product } from "../models/Product";
+import { DataService } from "./data.service";
+import { BasketService } from "./basket.service";
+import { BehaviorSubject, combineLatest, Observable } from "rxjs";
+import { map, filter } from "rxjs/operators";
+import { isDefined } from "@angular/compiler/src/util";
 
 @Injectable({
   providedIn: "root"
@@ -28,23 +29,21 @@ export class ProductsService {
 
   getByCategoryId(id: number): Observable<Product[]> {
     return combineLatest([
-      this.products$.pipe(),
-      this.categoriesService.findDeepChildren(id)]
-    ).pipe(
-      map(([products, ids]) => {
-        return products.filter(p => ids.includes(p.categoryId));
-      })
+      this.products$,
+      this.categoriesService.findDeepChildren(id)
+    ]).pipe(
+      map(([products, ids]) => products.filter(p => ids.includes(p.categoryId)))
     );
   }
 
   getByUserBasket(): Observable<Product[]> {
-    return combineLatest(
-      [this.products$.pipe(),
-        this.basketService.basket$.pipe()]
-    ).pipe(
-      map(([products, basket]) =>
-        products.filter(p => basket.products.has(p.id))
-      )
+    return combineLatest([
+      this.products$.pipe(filter(p => isDefined(p) && p.length > 0)),
+      this.basketService.basket$
+    ]).pipe(
+      map(([products, basket]) => {
+        return products.filter(p => basket.products.has(p.id));
+      })
     );
   }
 }
