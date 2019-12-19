@@ -1,19 +1,19 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "src/environments/environment";
-import {Category} from "../models/Category";
-import {Observable} from "rxjs";
-import {Product} from "../models/Product";
-import {Basket, BasketDto, mapBasket, parseBasket} from "../models/Basket";
-import {map} from "rxjs/operators";
-import {User} from "../models/User";
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
+import { Category } from "../models/Category";
+import { Observable } from "rxjs";
+import { Product } from "../models/Product";
+import { Basket, BasketDto, mapBasket, parseBasket } from "../models/Basket";
+import { map } from "rxjs/operators";
+import { User } from "../models/User";
+import { ShippingMethod } from "../models/ShippingMethod";
 
 @Injectable({
   providedIn: "root"
 })
 export class DataService {
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   login(username: string, password: string): Observable<any> {
     let formData = new FormData();
@@ -49,6 +49,12 @@ export class DataService {
     return this.http
       .get<Basket>(`${environment.baseApiUrl}/basket/${basketId}`)
       .pipe(map(data => parseBasket(data)));
+  }
+
+  getShippingMethods(basketId: string): Observable<ShippingMethod[]> {
+    return this.http.get<ShippingMethod[]>(
+      `${environment.baseApiUrl}/shipping/basket/${basketId}`
+    );
   }
 
   updateBasket(basket: Basket): Observable<Basket> {

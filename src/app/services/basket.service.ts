@@ -4,6 +4,7 @@ import { DataService } from "./data.service";
 import { Basket } from "../models/Basket";
 import { BehaviorSubject } from "rxjs";
 import { debounceTime } from "rxjs/operators";
+import { ShippingMethod } from "../models/ShippingMethod";
 
 @Injectable({
   providedIn: "root"
@@ -19,6 +20,11 @@ export class BasketService {
     items: 0,
     price: 0
   });
+
+  private _shippingMethods: ShippingMethod[];
+  shippingMethods$: BehaviorSubject<ShippingMethod[]> = new BehaviorSubject<
+    ShippingMethod[]
+  >([]);
 
   constructor(private dataService: DataService) {
     this.basketId = localStorage.getItem("basketId");
@@ -51,10 +57,17 @@ export class BasketService {
 
     if (isDefined(this._basket)) {
       localStorage.setItem("basketId", this._basket.id);
-      this.basketId = this._basket.id;
+      if (this._basketId !== this._basket.id) this.basketId = this._basket.id;
+      this.getShippingMethods();
     } else {
       localStorage.removeItem("basketId");
     }
+  }
+
+  set shippingMethods(shippingMethods: ShippingMethod[]) {
+    if (this._shippingMethods === shippingMethods) return;
+    this._shippingMethods = shippingMethods;
+    this.shippingMethods$.next(this._shippingMethods);
   }
 
   createBasket() {
@@ -68,6 +81,13 @@ export class BasketService {
     this.dataService.getBasket(this._basketId).subscribe(
       basket => (this.basket = basket),
       error => (this.basket = null)
+    );
+  }
+
+  getShippingMethods() {
+    this.dataService.getShippingMethods(this._basketId).subscribe(
+      shippingMethods => (this.shippingMethods = shippingMethods),
+      error => (this.shippingMethods = null)
     );
   }
 

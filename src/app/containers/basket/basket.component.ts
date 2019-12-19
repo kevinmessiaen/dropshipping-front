@@ -7,7 +7,8 @@ import { Product } from "src/app/models/Product";
 import { ProductsService } from "src/app/services/products.service";
 
 import { isDefined } from "@angular/compiler/src/util";
-import { map, filter } from "rxjs/operators";
+import { map, filter, first } from "rxjs/operators";
+import { ShippingMethod } from "src/app/models/ShippingMethod";
 
 @Component({
   selector: "app-basket",
@@ -16,6 +17,9 @@ import { map, filter } from "rxjs/operators";
 })
 export class BasketComponent implements OnInit {
   basket$: Observable<BasketWrapper>;
+  shippingMethods$: Observable<ShippingMethod[]>;
+  selectedDelivery: number = -1;
+  delivery: ShippingMethod;
 
   constructor(
     private basketService: BasketService,
@@ -44,6 +48,15 @@ export class BasketComponent implements OnInit {
         };
       })
     );
+    this.shippingMethods$ = this.basketService.shippingMethods$;
+  }
+
+  async onSelectDelivery(newValue) {
+    console.log(newValue);
+    this.selectedDelivery = newValue;
+    this.delivery = (
+      await this.shippingMethods$.pipe(first()).toPromise()
+    ).find(d => d.id == newValue);
   }
 }
 
