@@ -1,10 +1,32 @@
 <div class="under-nav">
   <div class="container pt-4">
     <div *ngIf="product$ | async" class="row">
-      <div class="col-sm-6 col-lg-6 col-12">
+      <div class="col-sm-6 col-lg-4 col-12">
         <img class="card-img-top" src="http://placehold.it/150x200" alt="" />
       </div>
-      <div class="col-sm-6 col-lg-6 col-12">
+      <div class="col-sm-6 col-lg-8 col-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <ng-container
+              *ngFor="let category of categoryPath$ | async; let last = last"
+            >
+              <li *ngIf="!last" class="breadcrumb-item">
+                <a [routerLink]="['/categorie', category.path]">{{
+                  category.name
+                }}</a>
+              </li>
+              <li
+                *ngIf="last"
+                class="breadcrumb-item active"
+                aria-current="page"
+              >
+                <a [routerLink]="['/categorie', category.path]">{{
+                  category.name
+                }}</a>
+              </li>
+            </ng-container>
+          </ol>
+        </nav>
         <h2 class="d-lg-none">{{ (product$ | async).name }}</h2>
         <h2 class="display-4 d-none d-lg-block">
           {{ (product$ | async).name }}

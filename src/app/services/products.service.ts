@@ -6,6 +6,7 @@ import { BasketService } from "./basket.service";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { isDefined } from "@angular/compiler/src/util";
+import { Category, findPathById } from "../models/Category";
 
 @Injectable({
   providedIn: "root"
@@ -51,5 +52,12 @@ export class ProductsService {
     return this.products$.pipe(
       map(products => products.find(p => p.path === path))
     );
+  }
+
+  findCategoryPathByProductPath(path: string): Observable<Category[]> {
+    return combineLatest([
+      this.findByPath(path),
+      this.categoriesService.categoryTree$
+    ]).pipe(map(([product, tree]) => findPathById(product.categoryId, tree)));
   }
 }

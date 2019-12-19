@@ -38,6 +38,26 @@ function buildFromParent(
   return node;
 }
 
+export function findPathById(
+  id: number,
+  categories: CategoryTree[]
+): Category[] {
+  if (!isDefined(categories) || categories.length === 0) return null;
+  let cur: CategoryTree = categories.find(c => c.data.id === id);
+  if (isDefined(cur)) return [cur.data];
+  return categories
+    .map(c => {
+      let found = findPathById(id, c.children);
+      if (isDefined(found)) {
+        found.unshift(c.data);
+        return found;
+      } else {
+        return null;
+      }
+    })
+    .find(c => isDefined(c));
+}
+
 export function findPath(path: string, categories: CategoryTree[]): Category[] {
   if (!isDefined(categories) || categories.length === 0) return null;
   let cur: CategoryTree = categories.find(c => c.data.path === path);
