@@ -12,7 +12,6 @@ export class BasketService {
   private updateRequests$: EventEmitter<Basket> = new EventEmitter<Basket>();
   private _basketId: string;
 
-  private oldIds: string[] = [];
   private _basket: Basket;
   basket$: BehaviorSubject<Basket> = new BehaviorSubject<Basket>({
     id: null,
@@ -35,10 +34,7 @@ export class BasketService {
   }
 
   set basketId(basketId: string) {
-    if (this._basketId === basketId || this.oldIds.includes(basketId)) return;
-    if (isDefined(this._basketId)) {
-      this.oldIds.push(this._basketId);
-    }
+    if (this._basketId === basketId) return;
     this._basketId = basketId;
 
     if (isDefined(this._basketId)) {

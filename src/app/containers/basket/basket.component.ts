@@ -37,7 +37,6 @@ export class BasketComponent implements OnInit {
         });
         map.delete(null);
         map.delete(undefined);
-        console.log(map);
         return {
           products: map,
           items: basket.items,
