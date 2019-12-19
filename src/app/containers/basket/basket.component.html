@@ -48,47 +48,60 @@
           </div>
         </div>
         <div class="col-lg-4">
-          <div class="d-flex">
-            <h4 class="text-uppercase">Total</h4>
-          </div>
-          <div class="dropdown-divider"></div>
-          <div class="d-flex">
-            <span class="flex-grow-1"><strong>Sous-total</strong></span>
-            <span class="align-self-end"
-              >{{ (basket$ | async)?.price.toFixed(2) }}€</span
-            >
-          </div>
-          <div class="dropdown-divider"></div>
-          <select
-            [ngModel]="selectedDelivery"
-            (ngModelChange)="onSelectDelivery($event)"
-            class="custom-select"
-          >
-            <option value="-1" selected disabled>Livraison</option>
-            <option
-              [value]="method.id"
-              *ngFor="let method of shippingMethods$ | async"
-              >{{ method.name }}</option
-            >
-          </select>
-          <div *ngIf="delivery" class="pt-2">
-            <span class="text-justify text-muted">{{
-              delivery.deliveryDate
-            }}</span>
-            <div class="dropdown-divider"></div>
+          <div class="sticky-top">
             <div class="d-flex">
-              <span class="flex-grow-1"><strong>Livraison</strong></span>
-              <span class="align-self-end"
-                >{{ delivery.fees.toFixed(2) }}€</span
-              >
+              <h4 class="text-uppercase">Total</h4>
             </div>
             <div class="dropdown-divider"></div>
             <div class="d-flex">
-              <span class="flex-grow-1"><strong>Total TTC</strong></span>
+              <span class="flex-grow-1"><strong>Sous-total</strong></span>
               <span class="align-self-end"
-                >{{
-                  ((basket$ | async)?.price + delivery.fees).toFixed(2)
-                }}€</span
+                >{{ (basket$ | async)?.price.toFixed(2) }}€</span
+              >
+            </div>
+            <div class="dropdown-divider"></div>
+            <select
+              [ngModel]="selectedDelivery"
+              (ngModelChange)="onSelectDelivery($event)"
+              class="custom-select"
+            >
+              <option value="-1" selected disabled>Livraison</option>
+              <option
+                [value]="method.id"
+                *ngFor="let method of shippingMethods$ | async"
+                >{{ method.name }}</option
+              >
+            </select>
+            <div *ngIf="delivery" class="pt-2">
+              <span class="text-justify text-muted d-block w-100">{{
+                delivery.deliveryDate
+              }}</span>
+              <div class="dropdown-divider"></div>
+              <div class="d-flex">
+                <span class="flex-grow-1"><strong>Livraison</strong></span>
+                <span *ngIf="delivery.fees > 0" class="align-self-end"
+                  >{{ delivery.fees.toFixed(2) }}€</span
+                >
+                <span
+                  *ngIf="delivery.fees == 0"
+                  class="align-self-end text-uppercase text-muted"
+                  >offerte!</span
+                >
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="d-flex">
+                <span class="flex-grow-1"><strong>Total TTC</strong></span>
+                <span class="align-self-end"
+                  >{{
+                    ((basket$ | async)?.price + delivery.fees).toFixed(2)
+                  }}€</span
+                >
+              </div>
+            </div>
+            <div *ngIf="!delivery">
+              <span class="text-justify text-muted d-block w-100"
+                >Veuillez sélectionner un mode de livraison avant de
+                continuer</span
               >
             </div>
           </div>

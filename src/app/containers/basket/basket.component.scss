@@ -1,0 +1,13 @@
+@import "../../../styles.scss";
+
+@include media-breakpoint-down(sm) {
+  .sticky-top {
+    position: relative !important;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .sticky-top {
+    top: 5rem;
+  }
+}
