@@ -19,6 +19,7 @@ import { RegisterComponent } from "./containers/register/register.component";
 import { StoreComponent } from "./containers/store/store.component";
 import { PageNotFoundComponent } from "./containers/page-not-found/page-not-found.component";
 import { BasicAuthInterceptor } from "./basic-auth.interceptor";
+import { AdminModule } from "./admin/admin.module";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { BasicAuthInterceptor } from "./basic-auth.interceptor";
     FontAwesomeModule,
     HttpClientModule,
     FormsModule,
+    AdminModule,
     AppRoutingModule,
     BrowserAnimationsModule
   ],

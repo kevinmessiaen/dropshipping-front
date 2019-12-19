@@ -3,8 +3,8 @@ import { BasketService } from "./basket.service";
 import { User } from "../models/User";
 import { DataService } from "./data.service";
 import { isDefined } from "@angular/compiler/src/util";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { map, catchError } from "rxjs/operators";
+import { BehaviorSubject, Observable, of, combineLatest } from "rxjs";
+import { map, catchError, filter } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -72,5 +72,12 @@ export class UserService {
       user => (this.user = user),
       error => (this.isLogged = false)
     );
+  }
+
+  fullState(): Observable<[boolean, User | null]> {
+    return combineLatest([
+      this.isLogged$.pipe(filter(logged => isDefined(logged))),
+      this.user$
+    ]).pipe(filter(([logged, user]) => !logged || isDefined(user)));
   }
 }

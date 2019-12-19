@@ -9,6 +9,7 @@ import { UserService } from "../../services/user.service";
 import { Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { isDefined } from "@angular/compiler/src/util";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: "app-login",
@@ -45,7 +46,14 @@ export class LoginComponent implements OnInit {
       this.userService.login(this.username, this.password).subscribe(loged => {
         if (loged) {
           this.closeModal.nativeElement.click();
-          this.router.navigate(["/store"]);
+          let subscription: Subscription = this.userService
+            .fullState()
+            .pipe(filter(([isLogged, user]) => isLogged))
+            .subscribe(([isLogged, user]) => {
+              if (user.isAdmin) this.router.navigate(["/admin"]);
+              else this.router.navigate(["/store"]);
+              subscription.unsubscribe();
+            });
         } else {
           this.error = true;
         }
