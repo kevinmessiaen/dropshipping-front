@@ -20,7 +20,6 @@ export class AdminComponent implements OnInit {
       let subscription: Subscription = this.userService
         .fullState()
         .subscribe(([isLogged, user]) => {
-          console.log("rerout");
           if (!isLogged || !user.isAdmin) {
             this.router.navigate(["/store"]);
           }

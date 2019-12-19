@@ -20,6 +20,7 @@ import { StoreComponent } from "./containers/store/store.component";
 import { PageNotFoundComponent } from "./containers/page-not-found/page-not-found.component";
 import { BasicAuthInterceptor } from "./basic-auth.interceptor";
 import { AdminModule } from "./admin/admin.module";
+import { ProductComponent } from "./containers/product/product.component";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AdminModule } from "./admin/admin.module";
     LoginComponent,
     RegisterComponent,
     StoreComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,16 @@
+<div class="under-nav">
+  <div class="container pt-4">
+    <div *ngIf="product$ | async" class="row">
+      <div class="col-sm-6 col-lg-6 col-12">
+        <img class="card-img-top" src="http://placehold.it/150x200" alt="" />
+      </div>
+      <div class="col-sm-6 col-lg-6 col-12">
+        <h2 class="d-lg-none">{{ (product$ | async).name }}</h2>
+        <h2 class="display-4 d-none d-lg-block">
+          {{ (product$ | async).name }}
+        </h2>
+        <h4>{{ (product$ | async).price }}€</h4>
+      </div>
+    </div>
+  </div>
+</div>

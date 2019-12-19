@@ -6,12 +6,14 @@ import { HomeComponent } from "./containers/home/home.component";
 import { LoginComponent } from "./containers/login/login.component";
 import { StoreComponent } from "./containers/store/store.component";
 import { PageNotFoundComponent } from "./containers/page-not-found/page-not-found.component";
+import { ProductComponent } from "./containers/product/product.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "login", component: LoginComponent },
   { path: "store", component: StoreComponent },
   { path: "categorie/:path", component: CategoryComponent },
+  { path: "produit/:path", component: ProductComponent },
   { path: "basket", component: BasketComponent },
   { path: "page-introuvable", component: PageNotFoundComponent },
   { path: "**", redirectTo: "/page-introuvable", pathMatch: "full" }

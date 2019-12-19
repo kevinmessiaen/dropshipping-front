@@ -46,4 +46,10 @@ export class ProductsService {
       })
     );
   }
+
+  findByPath(path: string): Observable<Product> {
+    return this.products$.pipe(
+      map(products => products.find(p => p.path === path))
+    );
+  }
 }

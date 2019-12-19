@@ -1,3 +1,11 @@
+@import "../../../styles.scss";
+
 body {
   padding-top: 0px;
+}
+
+@include media-breakpoint-down(sm) {
+  .ml-auto {
+    float: left;
+  }
 }
