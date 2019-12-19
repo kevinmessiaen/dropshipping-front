@@ -1,37 +1,45 @@
 <div class="under-nav">
   <div class="container pt-4">
-    <div *ngIf="product$ | async" class="row">
-      <div class="col-sm-6 col-lg-4 col-12">
-        <img class="card-img-top" src="http://placehold.it/150x200" alt="" />
-      </div>
-      <div class="col-sm-6 col-lg-8 col-12">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <ng-container
-              *ngFor="let category of categoryPath$ | async; let last = last"
-            >
-              <li *ngIf="!last" class="breadcrumb-item">
-                <a [routerLink]="['/categorie', category.path]">{{
-                  category.name
-                }}</a>
-              </li>
-              <li
-                *ngIf="last"
-                class="breadcrumb-item active"
-                aria-current="page"
-              >
-                <a [routerLink]="['/categorie', category.path]">{{
-                  category.name
-                }}</a>
-              </li>
-            </ng-container>
-          </ol>
-        </nav>
-        <h2 class="d-lg-none">{{ (product$ | async).name }}</h2>
-        <h2 class="display-4 d-none d-lg-block">
-          {{ (product$ | async).name }}
-        </h2>
-        <h4>{{ (product$ | async).price }}€</h4>
+    <div *ngIf="product$ | async">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <ng-container *ngFor="let category of categoryPath$ | async">
+            <li class="breadcrumb-item">
+              <a [routerLink]="['/categorie', category.path]">{{
+                category.name
+              }}</a>
+            </li>
+          </ng-container>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ (product$ | async)?.name }}
+          </li>
+        </ol>
+      </nav>
+      <div class="row">
+        <div class="d-none d-lg-block col-lg-2 my-auto">
+          <img
+            class="card-img-top px-2 pb-3"
+            src="http://placehold.it/100x100"
+            alt=""
+          />
+          <img
+            class="card-img-top px-2 pb-3"
+            src="http://placehold.it/100x100"
+            alt=""
+          />
+          <img
+            class="card-img-top px-2"
+            src="http://placehold.it/100x100"
+            alt=""
+          />
+        </div>
+        <div class="col-md-6 col-lg-4 col-12">
+          <img class="card-img-top" src="http://placehold.it/150x200" alt="" />
+        </div>
+        <div class="col-md-6 col-12">
+          <h2>{{ (product$ | async).name }}</h2>
+          <h4 class="">{{ (product$ | async).price }}€</h4>
+        </div>
       </div>
     </div>
   </div>
