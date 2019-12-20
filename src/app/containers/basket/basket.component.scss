@@ -9,5 +9,8 @@
 @include media-breakpoint-up(md) {
   .sticky-top {
     top: 5rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
