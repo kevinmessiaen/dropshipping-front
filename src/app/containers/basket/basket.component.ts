@@ -1,15 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Basket } from "src/app/models/Basket";
 import { BasketService } from "src/app/services/basket.service";
-import { Observable, Subscription, combineLatest } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
+import { Observable, Subscription, combineLatest, of } from "rxjs";
 import { Product } from "src/app/models/Product";
 import { ProductsService } from "src/app/services/products.service";
 
-import { isDefined } from "@angular/compiler/src/util";
 import { map, filter, first } from "rxjs/operators";
 import { ShippingMethod } from "src/app/models/ShippingMethod";
-
 @Component({
   selector: "app-basket",
   templateUrl: "./basket.component.html",
@@ -17,6 +13,7 @@ import { ShippingMethod } from "src/app/models/ShippingMethod";
 })
 export class BasketComponent implements OnInit {
   basket$: Observable<BasketWrapper>;
+
   shippingMethods$: Observable<ShippingMethod[]>;
   selectedDelivery: number = -1;
   delivery: ShippingMethod;
@@ -52,7 +49,6 @@ export class BasketComponent implements OnInit {
   }
 
   async onSelectDelivery(newValue) {
-    console.log(newValue);
     this.selectedDelivery = newValue;
     this.delivery = (
       await this.shippingMethods$.pipe(first()).toPromise()

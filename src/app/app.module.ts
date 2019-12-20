@@ -21,6 +21,7 @@ import { PageNotFoundComponent } from "./containers/page-not-found/page-not-foun
 import { BasicAuthInterceptor } from "./basic-auth.interceptor";
 import { AdminModule } from "./admin/admin.module";
 import { ProductComponent } from "./containers/product/product.component";
+import { ContactFormComponent } from './containers/contact-form/contact-form.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ProductComponent } from "./containers/product/product.component";
     RegisterComponent,
     StoreComponent,
     PageNotFoundComponent,
-    ProductComponent
+    ProductComponent,
+    ContactFormComponent
   ],
   imports: [
     BrowserModule,

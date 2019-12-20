@@ -72,6 +72,7 @@
                 >{{ method.name }}</option
               >
             </select>
+
             <div *ngIf="delivery" class="pt-2">
               <span class="text-justify text-muted d-block w-100">{{
                 delivery.deliveryDate
@@ -97,12 +98,7 @@
                   }}€</span
                 >
               </div>
-            </div>
-            <div *ngIf="!delivery">
-              <span class="text-justify d-block w-100 text-danger"
-                >Veuillez sélectionner un mode de livraison avant de
-                continuer</span
-              >
+              <app-contact-form></app-contact-form>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { Basket, BasketDto, mapBasket, parseBasket } from "../models/Basket";
 import { map } from "rxjs/operators";
 import { User } from "../models/User";
 import { ShippingMethod } from "../models/ShippingMethod";
+import { City } from "../models/City";
 
 @Injectable({
   providedIn: "root"
@@ -64,5 +65,11 @@ export class DataService {
         mapBasket(basket)
       )
       .pipe(map(data => parseBasket(data)));
+  }
+
+  findCityByPostCode(postCode: string): Observable<City[]> {
+    return this.http.get<City[]>(
+      `${environment.baseApiUrl}/city/code/${postCode}`
+    );
   }
 }

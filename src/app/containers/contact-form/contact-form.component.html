@@ -1,0 +1,77 @@
+<div class="dropdown-divider"></div>
+<h4 class="text-uppercase">Coordonnées</h4>
+<div class="dropdown-divider"></div>
+<div class="input-group flex">
+  <select class="form-control">
+    <option value="M" selected>M.</option>
+    <option value="F">Mme</option>
+  </select>
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Prénom"
+    aria-label="Prénom du destinataire"
+  />
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Nom"
+    aria-label="Nom du destinataire"
+  />
+</div>
+<div class="pt-2">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Numéro et libellé de la voie"
+    aria-label="Numéro et libellé de la voie"
+  />
+</div>
+<div class="pt-2">
+  <input
+    type="text"
+    class="form-control "
+    placeholder="Bâtiment"
+    aria-label="Bâtiment"
+  />
+</div>
+<div class="pt-2">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Lieu dit ou service"
+    aria-label="Lieu dit ou service"
+  />
+</div>
+<div class="pt-2">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Complément d'adresse"
+    aria-label="Complément d'adresse"
+  />
+</div>
+<div class="input-group flex pt-2">
+  <input
+    type="text"
+    [(ngModel)]="postCode"
+    maxlength="5"
+    class="form-control col-4"
+    placeholder="Code postal"
+    aria-label="Code postal"
+    (keyup)="postCodeChanged($event)"
+  />
+  <select
+    [ngModel]="selectedCity"
+    (ngModelChange)="onSelectCity($event)"
+    class="form-control col-8"
+  >
+    <option value="-1" selected disabled>Ville</option>
+    <option [value]="city.id" *ngFor="let city of cities$ | async">{{
+      city.name
+    }}</option>
+  </select>
+</div>
+<div class="pt-2">
+  <input value="France" type="text" class="form-control" disabled />
+</div>
