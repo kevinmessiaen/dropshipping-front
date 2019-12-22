@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import {Component, OnInit, Input, ViewChild, ElementRef} from "@angular/core";
 import { Observable } from "rxjs";
 import { Product } from "src/app/models/Product";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
@@ -23,6 +23,10 @@ export class ProductsComponent implements OnInit {
   }
 
   products$: Observable<Product[]>;
+  private showInModal: Product;
+
+  @ViewChild("openAddToBasketModal", { static: false })
+  private openAddToBasketModal: ElementRef;
 
   constructor(
     private productsService: ProductsService,
@@ -38,7 +42,9 @@ export class ProductsComponent implements OnInit {
     this.products$ = this.productsService.getByCategoryId(this._category);
   }
 
-  addToBasket(product: number) {
-    this.basketService.addToBasket(product, 1);
+
+  addToBasket(product: Product) {
+    this.showInModal = product;
+    this.openAddToBasketModal.nativeElement.click();
   }
 }

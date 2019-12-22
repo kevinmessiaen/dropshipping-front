@@ -4,5 +4,6 @@ export class Product {
   desc: string;
   path: string;
   price: number;
+  stock: number;
   categoryId: number;
 }

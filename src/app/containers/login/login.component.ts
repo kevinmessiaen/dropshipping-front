@@ -1,12 +1,11 @@
 import {
   Component,
   OnInit,
-  OnDestroy,
   ElementRef,
   ViewChild
 } from "@angular/core";
 import { UserService } from "../../services/user.service";
-import { Observable, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { isDefined } from "@angular/compiler/src/util";
 import { filter } from "rxjs/operators";

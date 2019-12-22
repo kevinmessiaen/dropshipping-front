@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ProductsService } from "src/app/services/products.service";
 import { Observable } from "rxjs";
@@ -26,9 +26,5 @@ export class ProductComponent implements OnInit {
         params.path
       );
     });
-  }
-
-  addToBasket(product: Product) {
-
   }
 }
