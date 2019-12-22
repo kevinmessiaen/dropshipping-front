@@ -22,6 +22,7 @@ import { BasicAuthInterceptor } from "./basic-auth.interceptor";
 import { AdminModule } from "./admin/admin.module";
 import { ProductComponent } from "./containers/product/product.component";
 import { ContactFormComponent } from './containers/contact-form/contact-form.component';
+import { AddToBasketComponent } from './containers/add-to-basket/add-to-basket.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ContactFormComponent } from './containers/contact-form/contact-form.com
     StoreComponent,
     PageNotFoundComponent,
     ProductComponent,
-    ContactFormComponent
+    ContactFormComponent,
+    AddToBasketComponent
   ],
   imports: [
     BrowserModule,

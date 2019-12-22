@@ -1,22 +1,22 @@
-import { Component, OnInit } from "@angular/core";
-import { BasketService } from "src/app/services/basket.service";
-import { Observable, combineLatest } from "rxjs";
-import { Product } from "src/app/models/Product";
-import { ProductsService } from "src/app/services/products.service";
-import {
-  faPaypal as fabPaypal,
-  faCcMastercard as fabCcMastercard,
-  faCcVisa as fabCcVisa
-} from "@fortawesome/free-brands-svg-icons";
-import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
-import { map, first } from "rxjs/operators";
-import { ShippingMethod } from "src/app/models/ShippingMethod";
+import {Component, OnInit} from "@angular/core";
+import {BasketService} from "src/app/services/basket.service";
+import {combineLatest, Observable} from "rxjs";
+import {Product} from "src/app/models/Product";
+import {ProductsService} from "src/app/services/products.service";
+import {first, map} from "rxjs/operators";
+import {ShippingMethod} from "src/app/models/ShippingMethod";
+import {faCcMastercard, faCcVisa, faPaypal} from "@fortawesome/free-brands-svg-icons";
+
 @Component({
   selector: "app-basket",
   templateUrl: "./basket.component.html",
   styleUrls: ["./basket.component.scss"]
 })
 export class BasketComponent implements OnInit {
+  faPaypal = faPaypal;
+  faCcMastercard = faCcMastercard;
+  faCcVisa = faCcVisa;
+
   basket$: Observable<BasketWrapper>;
 
   validate: boolean = false;
@@ -28,15 +28,13 @@ export class BasketComponent implements OnInit {
   constructor(
     private basketService: BasketService,
     private productsService: ProductsService,
-    library: FaIconLibrary
   ) {
-    library.addIcons(fabPaypal, fabCcMastercard, fabCcVisa);
   }
 
   ngOnInit() {
     this.basket$ = combineLatest(
       [this.productsService.getByUserBasket(),
-      this.basketService.basket$]
+        this.basketService.basket$]
     ).pipe(
       map(([products, basket]) => {
         let map: Map<Product, number> = new Map();
