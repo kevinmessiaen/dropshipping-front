@@ -27,4 +27,8 @@ export class ProductComponent implements OnInit {
       );
     });
   }
+
+  addToBasket(product: Product) {
+
+  }
 }
