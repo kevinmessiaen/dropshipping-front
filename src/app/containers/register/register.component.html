@@ -5,20 +5,92 @@
       <div class="modal-header">
         <h5 class="modal-title">Inscription</h5>
         <button
-          #closeRegisterModal
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+          #closeRegisterModal type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
 
-      </div>
+      <div class="modal-body">
+        <div class="form-group row">
+          <label for="loginUsername" class="col-sm-4 col-form-label">Nom :</label>
+          <div class="col-sm-8" [class.validate]="validate">
+            <input type="text" class="form-control" id="Username" placeholder="Nom"
+              [(ngModel)]="username"
+              #loginUsername="ngModel"
+              (keyup.enter)="login()" required minlength="4" maxlength="32"/>
+            <div *ngIf="validate && Username.invalid" class="text-danger">
+              <div *ngIf="Username.errors.required">
+                Votre nom est requis.
+              </div>
+              <div *ngIf="Username.errors.minlength">
+                Le nom doit faire au moins 4 charactères.
+              </div>
+              <div *ngIf="Email.errors.maxlength">
+                Le nom doit faire au plus 32 charactères.
+              </div>
+            </div>
+          </div>
+        </div>
+
+          <div class="form-group row">
+            <label for="loginUsername" class="col-sm-4 col-form-label">Prénom :</label>
+            <div class="col-sm-8" [class.validate]="validate">
+              <input type="text" class="form-control" id="loginUsername" placeholder="Prénom"
+                     [(ngModel)]="name"
+                     #loginUsername="ngModel"
+                     (keyup.enter)="login()" required minlength="4" maxlength="32"/>
+              <div *ngIf="validate && loginUsername.invalid" class="text-danger">
+                <div *ngIf="loginUsername.errors.required">
+                  Votre prénom est requis.
+                </div>
+                <div *ngIf="loginUsername.errors.minlength">
+                  Le prénom doit faire au moins 4 charactères.
+                </div>
+                <div *ngIf="loginUsername.errors.maxlength">
+                  Le prénom doit faire au plus 32 charactères.
+                </div>
+              </div>
+            </div>
+          </div>
+
+            <div class="form-group row">
+              <label for="loginUsername" class="col-sm-4 col-form-label">Email :</label>
+              <div class="col-sm-8" [class.validate]="validate">
+                <input type="mail" class="form-control" id="Email" placeholder="Email"
+                       [(ngModel)]="Email"
+                       #loginUsername="ngModel"
+                       (keyup.enter)="login()" required minlength="4" maxlength="32"/>
+                <div *ngIf="validate && Email.invalid" class="text-danger">
+                  <div *ngIf="Email.errors.required">
+                    Votre nom est requis.
+                  </div>
+                  <div *ngIf="Email.errors.minlength">
+                    L'email doit faire au moins 4 charactères.
+                  </div>
+
+                </div>
+              </div>
+            </div>
+              <div class="form-group row">
+                <label for="loginUsername" class="col-sm-4 col-form-label">Confirmation Email :</label>
+                <div class="col-sm-8" [class.validate]="validate">
+                  <input type="mail" class="form-control" id="Email2" placeholder="confirmation de votre email"
+                         [(ngModel)]="ConfirmationEmail"
+                         #loginUsername="ngModel"
+                         (keyup.enter)="login()" required minlength="4" maxlength="32"/>
+                  <div *ngIf="validate && ConfirmationEmail.invalid" class="text-danger">
+                    <div *ngIf="ConfirmationEmail.errors.required">
+                      Votre nom est requis.
+                    </div>
+                    <div *ngIf="ConfirmationEmail.errors.minlength">
+                      L'email doit faire au moins 4 charactères.
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary"  (click)="login()">Se connecter</button>
         <button type="button" class="btn btn-primary" (click)="register()">
           S'inscrire
         </button>
