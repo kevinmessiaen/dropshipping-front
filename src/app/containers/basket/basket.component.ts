@@ -6,6 +6,8 @@ import {ProductsService} from "src/app/services/products.service";
 import {first, map} from "rxjs/operators";
 import {ShippingMethod} from "src/app/models/ShippingMethod";
 import {faCcMastercard, faCcVisa, faPaypal} from "@fortawesome/free-brands-svg-icons";
+import {FaIconLibrary} from "@fortawesome/angular-fontawesome";
+import {faPlus as fasPlus, faMinus as fasMinus,faTimes as fasTimes} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-basket",
@@ -28,8 +30,11 @@ export class BasketComponent implements OnInit {
   constructor(
     private basketService: BasketService,
     private productsService: ProductsService,
+    library: FaIconLibrary
   ) {
+    library.addIcons(fasPlus,fasMinus,fasTimes)
   }
+
 
   ngOnInit() {
     this.basket$ = combineLatest(
