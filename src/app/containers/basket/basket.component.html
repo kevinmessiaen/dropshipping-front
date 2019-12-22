@@ -1,124 +1,112 @@
 <div class="under-nav">
   <div class="container pt-4">
-    <div *ngIf="error$ | async" class="alert alert-primary" role="alert">
-      Impossible de charger le panier
-    </div>
-
     <div
-      *ngIf="isLoading$ | async"
-      class="spinner-border text-primary"
-      role="status"
+      *ngIf="!(basket$ | async)?.items || (basket$ | async)?.items === 0"
+      class="text-center"
     >
-      <span class="sr-only">Loading...</span>
+      Votre panier est vide!
     </div>
-
-    <div *ngIf="!(error$ | async)">
-      <div
-        *ngIf="!(basket$ | async)?.items || (basket$ | async)?.items === 0"
-        class="text-center"
-      >
-        Votre panier est vide!
-      </div>
-      <div *ngIf="(basket$ | async)?.items > 0" class="row">
-        <div class="col-lg-8">
-          <div class="d-flex">
-            <h4 class="text-uppercase flex-grow-1">Mon panier</h4>
-            <span class="align-self-end">Prix</span>
-          </div>
-          <div class="dropdown-divider"></div>
-          <div *ngFor="let product of (basket$ | async)?.products | keyvalue">
-            <div class="row">
-              <div class="col-4">
-                <img
-                  class="card-img-top"
-                  src="http://placehold.it/200x200"
-                  alt=""
-                />
-              </div>
-              <div class="col-6">
+    <div *ngIf="(basket$ | async)?.items > 0" class="row">
+      <div class="col-lg-8">
+        <div class="d-flex">
+          <h4 class="text-uppercase flex-grow-1">Mon panier</h4>
+          <span class="align-self-end">Prix</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div *ngFor="let product of (basket$ | async)?.products | keyvalue">
+          <div class="row">
+            <div class="col-4">
+              <img
+                class="card-img-top"
+                src="http://placehold.it/200x200"
+                alt=""
+              />
+            </div>
+            <div class="col-6">
                 <span>
                   <strong>{{ product.key.name }}</strong
                   ><br/>
                 </span>
-                <span>Quantité: {{ product.value }}</span>
-              </div>
-              <div class="col-2 text-right">{{ product.key.price }}€</div>
+              <span>Quantité: {{ product.value }}</span>
             </div>
-            <div class="dropdown-divider"></div>
+
+            <div class="col-2 text-right">{{ product.key.price }}€</div>
+            <button type="button" (click)="selectQuantity(product.key.id.name)">X</button>
           </div>
+          <div class="dropdown-divider"></div>
         </div>
-        <div class="col-lg-4">
-          <div class="sticky-top">
-            <div class="d-flex">
-              <h4 class="text-uppercase">Total</h4>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="d-flex">
-              <span class="flex-grow-1"><strong>Sous-total</strong></span>
-              <span class="align-self-end"
-              >{{ (basket$ | async)?.price.toFixed(2) }}€</span
-              >
-            </div>
-            <div class="dropdown-divider"></div>
-            <select
-              [ngModel]="selectedDelivery"
-              (ngModelChange)="onSelectDelivery($event)"
-              class="custom-select"
+      </div>
+      <div class="col-lg-4">
+        <div class="sticky-top">
+          <div class="d-flex">
+            <h4 class="text-uppercase">Total</h4>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="d-flex">
+            <span class="flex-grow-1"><strong>Sous-total</strong></span>
+            <span class="align-self-end"
+            >{{ (basket$ | async)?.price.toFixed(2) }}€</span
             >
-              <option value="-1" selected disabled>Livraison</option>
-              <option
-                [value]="method.id"
-                *ngFor="let method of shippingMethods$ | async"
-              >{{ method.name }}</option
-              >
-            </select>
-            <span *ngIf="!delivery" class="text-justify text-danger d-block w-100">
+          </div>
+          <div class="dropdown-divider"></div>
+          <select
+            [ngModel]="selectedDelivery"
+            (ngModelChange)="onSelectDelivery($event)"
+            class="custom-select"
+          >
+            <option value="-1" selected disabled>Livraison</option>
+            <option
+              [value]="method.id"
+              *ngFor="let method of shippingMethods$ | async"
+            >{{ method.name }}</option
+            >
+          </select>
+          <span *ngIf="!delivery" class="text-justify text-danger d-block w-100">
               Veuillez choisir un mode de livraison afin de poursuivre votre commande.
             </span>
-            <div *ngIf="delivery" class="pt-2">
+          <div *ngIf="delivery" class="pt-2">
               <span class="text-justify text-muted d-block w-100">{{
                 delivery.deliveryDate
                 }}</span>
-              <div class="dropdown-divider"></div>
-              <div class="d-flex">
-                <span class="flex-grow-1"><strong>Livraison</strong></span>
-                <span *ngIf="delivery.fees > 0" class="align-self-end"
-                >{{ delivery.fees.toFixed(2) }}€</span
-                >
-                <span
-                  *ngIf="delivery.fees == 0"
-                  class="align-self-end text-uppercase text-muted"
-                >Offerte</span
-                >
-              </div>
-              <div class="dropdown-divider"></div>
-              <div class="d-flex">
-                <span class="flex-grow-1"><strong>Total TTC</strong></span>
-                <span class="align-self-end"
-                >{{
-                  ((basket$ | async)?.price + delivery.fees).toFixed(2)
-                  }}€</span
-                >
-              </div>
-              <div class="dropdown-divider"></div>
-              <div class="row text-center display-4">
-                <fa-icon
-                  [icon]="['fab', 'paypal']"
-                  class="col-4 color-paypal"
-                ></fa-icon>
-                <fa-icon
-                  [icon]="['fab', 'cc-mastercard']"
-                  class="col-4 color-mastercard"
-                ></fa-icon>
-                <fa-icon
-                  [icon]="['fab', 'cc-visa']"
-                  class="col-4 color-visa"
-                ></fa-icon>
-              </div>
-              <div class="dropdown-divider"></div>
-
-              <button type="button" class="btn btn-primary float-right" (click)="createOrder()">Commander</button>
+            <div class="dropdown-divider"></div>
+            <div class="d-flex">
+              <span class="flex-grow-1"><strong>Livraison</strong></span>
+              <span *ngIf="delivery.fees > 0" class="align-self-end"
+              >{{ delivery.fees.toFixed(2) }}€</span
+              >
+              <span
+                *ngIf="delivery.fees == 0"
+                class="align-self-end text-uppercase text-muted"
+              >Offerte</span
+              >
             </div>
+            <div class="dropdown-divider"></div>
+            <div class="d-flex">
+              <span class="flex-grow-1"><strong>Total TTC</strong></span>
+              <span class="align-self-end"
+              >{{
+                ((basket$ | async)?.price + delivery.fees).toFixed(2)
+                }}€</span
+              >
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="row text-center display-4">
+              <fa-icon
+                [icon]="['fab', 'paypal']"
+                class="col-4 color-paypal"
+              ></fa-icon>
+              <fa-icon
+                [icon]="['fab', 'cc-mastercard']"
+                class="col-4 color-mastercard"
+              ></fa-icon>
+              <fa-icon
+                [icon]="['fab', 'cc-visa']"
+                class="col-4 color-visa"
+              ></fa-icon>
+            </div>
+            <div class="dropdown-divider"></div>
+
+            <button type="button" class="btn btn-primary float-right" (click)="createOrder()">Commander</button>
           </div>
         </div>
       </div>

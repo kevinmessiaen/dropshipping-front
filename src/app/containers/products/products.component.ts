@@ -9,7 +9,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ProductsService } from "src/app/services/products.service";
 import { BasketService } from "src/app/services/basket.service";
-import { CategoriesService } from "src/app/services/categories.service";
 
 @Component({
   selector: "app-products",

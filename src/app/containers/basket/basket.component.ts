@@ -68,6 +68,14 @@ export class BasketComponent implements OnInit {
   createOrder() {
     this.validate = true;
   }
+
+  deleteProduct(id: number) {
+
+  }
+
+  selectQuantity(id: number) {
+
+  }
 }
 
 class BasketWrapper {
