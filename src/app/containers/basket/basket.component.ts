@@ -1,10 +1,15 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { BasketService } from "src/app/services/basket.service";
-import { Observable, Subscription, combineLatest, of } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { Product } from "src/app/models/Product";
 import { ProductsService } from "src/app/services/products.service";
-
-import { map, filter, first } from "rxjs/operators";
+import {
+  faPaypal as fabPaypal,
+  faCcMastercard as fabCcMastercard,
+  faCcVisa as fabCcVisa
+} from "@fortawesome/free-brands-svg-icons";
+import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
+import { map, first } from "rxjs/operators";
 import { ShippingMethod } from "src/app/models/ShippingMethod";
 @Component({
   selector: "app-basket",
@@ -14,19 +19,24 @@ import { ShippingMethod } from "src/app/models/ShippingMethod";
 export class BasketComponent implements OnInit {
   basket$: Observable<BasketWrapper>;
 
+  validate: boolean = false;
+
   shippingMethods$: Observable<ShippingMethod[]>;
   selectedDelivery: number = -1;
   delivery: ShippingMethod;
 
   constructor(
     private basketService: BasketService,
-    private productsSerive: ProductsService
-  ) {}
+    private productsService: ProductsService,
+    library: FaIconLibrary
+  ) {
+    library.addIcons(fabPaypal, fabCcMastercard, fabCcVisa);
+  }
 
   ngOnInit() {
     this.basket$ = combineLatest(
-      this.productsSerive.getByUserBasket(),
-      this.basketService.basket$
+      [this.productsService.getByUserBasket(),
+      this.basketService.basket$]
     ).pipe(
       map(([products, basket]) => {
         let map: Map<Product, number> = new Map();
@@ -53,6 +63,10 @@ export class BasketComponent implements OnInit {
     this.delivery = (
       await this.shippingMethods$.pipe(first()).toPromise()
     ).find(d => d.id == newValue);
+  }
+
+  createOrder() {
+    this.validate = true;
   }
 }
 

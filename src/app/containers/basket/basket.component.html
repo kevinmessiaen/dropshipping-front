@@ -38,7 +38,7 @@
               <div class="col-6">
                 <span>
                   <strong>{{ product.key.name }}</strong
-                  ><br />
+                  ><br/>
                 </span>
                 <span>Quantité: {{ product.value }}</span>
               </div>
@@ -56,7 +56,7 @@
             <div class="d-flex">
               <span class="flex-grow-1"><strong>Sous-total</strong></span>
               <span class="align-self-end"
-                >{{ (basket$ | async)?.price.toFixed(2) }}€</span
+              >{{ (basket$ | async)?.price.toFixed(2) }}€</span
               >
             </div>
             <div class="dropdown-divider"></div>
@@ -69,36 +69,55 @@
               <option
                 [value]="method.id"
                 *ngFor="let method of shippingMethods$ | async"
-                >{{ method.name }}</option
+              >{{ method.name }}</option
               >
             </select>
-
+            <span *ngIf="!delivery" class="text-justify text-danger d-block w-100">
+              Veuillez choisir un mode de livraison afin de poursuivre votre commande.
+            </span>
             <div *ngIf="delivery" class="pt-2">
               <span class="text-justify text-muted d-block w-100">{{
                 delivery.deliveryDate
-              }}</span>
+                }}</span>
               <div class="dropdown-divider"></div>
               <div class="d-flex">
                 <span class="flex-grow-1"><strong>Livraison</strong></span>
                 <span *ngIf="delivery.fees > 0" class="align-self-end"
-                  >{{ delivery.fees.toFixed(2) }}€</span
+                >{{ delivery.fees.toFixed(2) }}€</span
                 >
                 <span
                   *ngIf="delivery.fees == 0"
                   class="align-self-end text-uppercase text-muted"
-                  >Offerte</span
+                >Offerte</span
                 >
               </div>
               <div class="dropdown-divider"></div>
               <div class="d-flex">
                 <span class="flex-grow-1"><strong>Total TTC</strong></span>
                 <span class="align-self-end"
-                  >{{
-                    ((basket$ | async)?.price + delivery.fees).toFixed(2)
+                >{{
+                  ((basket$ | async)?.price + delivery.fees).toFixed(2)
                   }}€</span
                 >
               </div>
-              <app-contact-form></app-contact-form>
+              <div class="dropdown-divider"></div>
+              <div class="row text-center display-4">
+                <fa-icon
+                  [icon]="['fab', 'paypal']"
+                  class="col-4 color-paypal"
+                ></fa-icon>
+                <fa-icon
+                  [icon]="['fab', 'cc-mastercard']"
+                  class="col-4 color-mastercard"
+                ></fa-icon>
+                <fa-icon
+                  [icon]="['fab', 'cc-visa']"
+                  class="col-4 color-visa"
+                ></fa-icon>
+              </div>
+              <div class="dropdown-divider"></div>
+
+              <button type="button" class="btn btn-primary float-right" (click)="createOrder()">Commander</button>
             </div>
           </div>
         </div>
