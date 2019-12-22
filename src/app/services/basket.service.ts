@@ -91,17 +91,36 @@ export class BasketService {
     );
   }
 
-  addToBasket(product: number) {
+  addToBasket(product: number, quantity: number) {
     if (isDefined(this._basket)) {
       if (!isDefined(this._basket.products))
         this._basket.products = new Map<number, number>();
       if (this._basket.products.has(product))
         this._basket.products.set(
           product,
-          this._basket.products.get(product) + 1
+          this._basket.products.get(product) + quantity
         );
-      else this._basket.products.set(product, 1);
+      else this._basket.products.set(product, quantity);
       this.updateRequests$.emit(this._basket);
     }
   }
+
+  removeProduct(product: number) {
+    if (isDefined(this._basket)) {
+      if (!isDefined(this._basket.products))
+        this._basket.products = new Map<number, number>();
+      this._basket.products.delete(product);
+      this.updateRequests$.emit(this._basket);
+    }
+  }
+
+  setProduct(product: number, quantity: number) {
+    if (isDefined(this._basket)) {
+      if (!isDefined(this._basket.products))
+        this._basket.products = new Map<number, number>();
+      this._basket.products.set(product, quantity);
+      this.updateRequests$.emit(this._basket);
+    }
+  }
+
 }

@@ -40,6 +40,6 @@ export class ProductsComponent implements OnInit {
   }
 
   addToBasket(product: number) {
-    this.basketService.addToBasket(product);
+    this.basketService.addToBasket(product, 1);
   }
 }
