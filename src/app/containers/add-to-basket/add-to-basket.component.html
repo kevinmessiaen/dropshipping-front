@@ -19,7 +19,7 @@
             <option
               [value]="i + 1"
               *ngFor="let loop of counter(product.stock > 10 ? 10 : product.stock); let i = index"
-            >{{ i + 1 }}</option>
+            >{{ (i + 1) + " - " + (product.price * (i + 1)).toFixed(2) + "€" }}</option>
           </select>
           <div class="input-group-append">
             <button type="button" class="btn btn-outline-primary" (click)="addToBasket()">Ajouter au panier</button>
