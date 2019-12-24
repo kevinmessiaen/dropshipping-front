@@ -41,6 +41,13 @@ export class NavbarComponent implements OnInit {
       )
     );
 
-    this.basket$ = this.basketService.basket$;
+    this.basket$ = this.basketService.basket$.pipe(
+      map(b => {
+        let map: Map<number, number> = new Map();
+        b.notInStock.forEach((v, k) => map.set(k, Math.random()));
+        b.notInStock = map;
+        return b;
+      })
+    );
   }
 }

@@ -77,3 +77,14 @@
     </a>
   </div>
 </nav>
+
+<div
+  aria-live="polite"
+  aria-atomic="true"
+  class="d-flex justify-content-center align-items-center notification-box"
+>
+  <app-not-in-stock
+    *ngFor="let notInStock of (basket$ | async)?.notInStock | keyvalue"
+    [product]="notInStock.key"
+  ></app-not-in-stock>
+</div>

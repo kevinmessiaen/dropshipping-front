@@ -1,0 +1,21 @@
+@import "../../../styles.scss";
+
+@include media-breakpoint-down(sm) {
+  .notification-box {
+    min-height: 200px;
+    position: fixed;
+    z-index: 1030;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .notification-box {
+    min-height: 200px;
+    position: fixed;
+    z-index: 1030;
+    top: 1.5em;
+    right: 1em;
+  }
+}

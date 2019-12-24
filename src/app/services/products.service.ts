@@ -54,6 +54,12 @@ export class ProductsService {
     );
   }
 
+  findById(id: number): Observable<Product> {
+    return this.products$.pipe(
+      map(products => products.find(p => p.id === id))
+    );
+  }
+
   findCategoryPathByProductPath(path: string): Observable<Category[]> {
     return combineLatest([
       this.findByPath(path),

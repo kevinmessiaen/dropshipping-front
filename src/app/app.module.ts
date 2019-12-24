@@ -23,6 +23,7 @@ import { AdminModule } from "./admin/admin.module";
 import { ProductComponent } from "./containers/product/product.component";
 import { ContactFormComponent } from './containers/contact-form/contact-form.component';
 import { AddToBasketComponent } from './containers/add-to-basket/add-to-basket.component';
+import { NotInStockComponent } from './containers/not-in-stock/not-in-stock.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { AddToBasketComponent } from './containers/add-to-basket/add-to-basket.c
     PageNotFoundComponent,
     ProductComponent,
     ContactFormComponent,
-    AddToBasketComponent
+    AddToBasketComponent,
+    NotInStockComponent
   ],
   imports: [
     BrowserModule,

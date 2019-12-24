@@ -17,6 +17,7 @@ export class BasketService {
   basket$: BehaviorSubject<Basket> = new BehaviorSubject<Basket>({
     id: null,
     products: new Map<number, number>(),
+    notInStock: new Map<number, number>(),
     items: 0,
     price: 0
   });
@@ -122,5 +123,4 @@ export class BasketService {
       this.updateRequests$.emit(this._basket);
     }
   }
-
 }
